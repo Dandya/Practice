@@ -4,5 +4,17 @@
 		"YearOfRelease": "1947",
 		"Publishers": "ooo",
 		"Rating": "4"
-	}
+	},
+   {
+      "Title": "Белый карнавал",
+		"YearOfRelease": "1356",
+		"Publishers": ["ааа", "bbb"],
+		"Rating": "5"
+   },
+   {
+      "Title": "Жёлтый карнавал",
+		"YearOfRelease": "1476",
+		"Publishers": ["Саша", "Котик", "Солнышко"],
+		"Rating": "10"
+   }
 ]

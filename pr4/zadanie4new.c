@@ -13,14 +13,13 @@ typedef struct
 book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks);
 int strEQ(char* strFirst,char * strSecond);
 char* readData(FILE* json);
-void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadСhar);
+void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadChar);
 void writeListOfPublishersInBook(FILE* json, book* structBook);
 char goToNextSignificantSymbol(FILE* json);
 void readKey(FILE* json, book* ArrOfBooks, int* pointerOnIndexRecordedBook);
 void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook);
 book* listOfDictJSON(FILE* json, book* arrOfBooks, int* countBooks);
 book* beginReadJSON(FILE* json, book* arrOfBooks, int* countBooks);
-
 /**********************************************/
 book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks)
 {
@@ -49,6 +48,7 @@ int strEQ(char* strFirst,char * strSecond)
     int index = 0;
     while(strFirst[index] == strSecond[index])
     {
+        printf("sEQ\n");
         if(strFirst[index] == '\0')
         {
             return 1;
@@ -71,6 +71,7 @@ char* readData(FILE* json)
     data[indexCharInData] = fgetc(json);
     while(data[indexCharInData] != '"')
     {
+        printf("rd\n");
         indexCharInData++;
         if (indexCharInData%20 == 0)
         {
@@ -87,12 +88,12 @@ char* readData(FILE* json)
     return data;
 }
 /**********************************************/
-void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadСhar)
+void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadChar)
 { 
     //"Title","YearOfRelease","Publishers","Rating"
     if(strEQ(key,"Title"))
     {
-        if(lastReadСhar == '"')  
+        if(lastReadChar == '"')  
         {
             structBook->nameBook = readData(json);
         }
@@ -106,7 +107,7 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadС
     else if(strEQ(key, "YearOfRelease"))
     {
         
-        if(lastReadСhar == '"')  
+        if(lastReadChar == '"')  
         {
             structBook->yearOfRelise = atoi(readData(json));
         }
@@ -119,11 +120,11 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadС
     //"Publishers""
     else if(strEQ(key, "Publishers"))
     {
-        if(lastReadСhar == '[')
+        if(lastReadChar == '[')
         {
             writeListOfPublishersInBook(json, structBook);    
         }
-        else if(lastReadСhar == '"')
+        else if(lastReadChar == '"')
         {
             
             if((structBook->publishers[0] = (char*)malloc(50*sizeof(char))) == NULL)
@@ -143,7 +144,7 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadС
     //"Rating"
     else if(strEQ(key, "Rating"))
     {
-        if(lastReadСhar == '"')  
+        if(lastReadChar == '"')  
         {
             structBook->rating = atoi(readData(json));
         }
@@ -171,6 +172,7 @@ void writeListOfPublishersInBook(FILE* json, book* structBook)
     
     while(goToNextSignificantSymbol(json) != ']')
     {
+        printf("wlopib\n");
         index++;
         if((structBook->publishers[index] = (char*)malloc(50*sizeof(char))) == NULL)
         {
@@ -185,8 +187,9 @@ char goToNextSignificantSymbol(FILE* json)
 {   
     char charInJSON = fgetc(json);
     
-    while(charInJSON != ':' || charInJSON != '"' ||  charInJSON != '[' ||  charInJSON != ']' || charInJSON != '{' || charInJSON != '}')
+    while(charInJSON != ':' && charInJSON != '"' && charInJSON != '[' &&  charInJSON != ']' && charInJSON != '{' && charInJSON != '}')
     {
+        printf("gtnss\n");
         charInJSON = fgetc(json);
     }
 
@@ -214,8 +217,10 @@ void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook)
     char result = goToNextSignificantSymbol(json);
     while(result == '"') //dungerous
     {
+        printf("ds\n");
         readKey(json, arrOfBooks,pointerOnIndexRecordedBook);
         result = goToNextSignificantSymbol(json);
+        printf("char - %c\n", result);
     }
     if(result != '}')
     {
@@ -228,8 +233,9 @@ book* listOfDictJSON(FILE* json, book* arrOfBooks, int* countBooks)
 {
     int index = 0;
     char result = goToNextSignificantSymbol(json);
-    while(result == '{')
+    while(result != ']')
     {
+        printf("lods\n");
         dictJSON(json, arrOfBooks, &index);
         index++;
         if(index%30 == 0)
@@ -240,6 +246,7 @@ book* listOfDictJSON(FILE* json, book* arrOfBooks, int* countBooks)
                 exit(10);
             }
         }
+        result = goToNextSignificantSymbol(json);
     }
     *countBooks = index + 1;
     return arrOfBooks;
@@ -264,7 +271,9 @@ book* beginReadJSON(FILE* json, book* arrOfBooks, int* countBooks)
 int main(int argc, char** argv)
 {
     int countBooks = 0;
-    book* arrOfBooks = createArrOfBooksFromJSON(argv[1], &countBooks); 
-    
+    book* arrOfBooks = createArrOfBooksFromJSON("data.json", &countBooks);
+    printf("\n%s - %d\n%s\n%d\n",arrOfBooks[0].nameBook, arrOfBooks[0].yearOfRelise, arrOfBooks[0].publishers[0], arrOfBooks[0].rating);
+    printf("\n%s - %d\n%s, %s\n%d\n",arrOfBooks[1].nameBook, arrOfBooks[1].yearOfRelise, arrOfBooks[1].publishers[0], arrOfBooks[1].publishers[1], arrOfBooks[1].rating); 
+    printf("\n%s - %d\n%s, %s, %s\n%d\n",arrOfBooks[2].nameBook, arrOfBooks[2].yearOfRelise, arrOfBooks[2].publishers[0], arrOfBooks[2].publishers[1],arrOfBooks[2].publishers[2], arrOfBooks[2].rating);
     return 0;
 }
