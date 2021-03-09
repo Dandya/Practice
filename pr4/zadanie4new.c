@@ -10,9 +10,21 @@ typedef struct
     int rating;
 }book;
 /**********************************************/
+book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks);
+int strEQ(char* strFirst,char * strSecond);
+char* readData(FILE* json);
+void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadСhar);
+void writeListOfPublishersInBook(FILE* json, book* structBook);
+char goToNextSignificantSymbol(FILE* json);
+void readKey(FILE* json, book* ArrOfBooks, int* pointerOnIndexRecordedBook);
+void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook);
+book* listOfDictJSON(FILE* json, book* arrOfBooks, int* countBooks);
+book* beginReadJSON(FILE* json, book* arrOfBooks, int* countBooks);
+
+/**********************************************/
 book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks)
 {
-    FILE *json = open(nameFileJSON, "r");
+    FILE *json = fopen(nameFileJSON, "r");
     
     if (json == NULL)
     {
@@ -20,7 +32,12 @@ book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks)
         exit(2);
     }
     
-    book* arrOfBooks = (book*)malloc(30*sizeof(book));
+    book* arrOfBooks;
+    if((arrOfBooks = (book*)malloc(30*sizeof(book))) == NULL)
+    {
+        printf("error malloc\n");
+        exit(6);
+    }
     
     arrOfBooks =  beginReadJSON(json, arrOfBooks, countBooks);
 
@@ -57,7 +74,7 @@ char* readData(FILE* json)
         indexCharInData++;
         if (indexCharInData%20 == 0)
         {
-            data = (char*)realloc(data, (indexCharInValue+20)*sizeof(char));
+            data = (char*)realloc(data, (indexCharInData+20)*sizeof(char));
             if(data == NULL)
             {
                 printf("error malloc\n");
@@ -112,7 +129,7 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadС
             if((structBook->publishers[0] = (char*)malloc(50*sizeof(char))) == NULL)
             {
                  printf("error malloc\n");
-                 return 0;
+                 exit(6);
             }
         
             structBook->publishers[0] = readData(json);
@@ -158,7 +175,7 @@ void writeListOfPublishersInBook(FILE* json, book* structBook)
         if((structBook->publishers[index] = (char*)malloc(50*sizeof(char))) == NULL)
         {
             printf("error malloc\n");
-            return 0;
+            exit(6);
         }
         structBook->publishers[index] = readData(json);
     }
@@ -168,8 +185,7 @@ char goToNextSignificantSymbol(FILE* json)
 {   
     char charInJSON = fgetc(json);
     
-    while(charInJSON != ':' || charInJSON != '"' ||  charInJSON != '[' ||  charInJSON != ']'\ 
-            || charInJSON != '{' || charInJSON != '}')
+    while(charInJSON != ':' || charInJSON != '"' ||  charInJSON != '[' ||  charInJSON != ']' || charInJSON != '{' || charInJSON != '}')
     {
         charInJSON = fgetc(json);
     }
@@ -218,7 +234,7 @@ book* listOfDictJSON(FILE* json, book* arrOfBooks, int* countBooks)
         index++;
         if(index%30 == 0)
         {
-            if((arrOfBooks = (book*)realloc((index+30)*sizeof(book))) == NULL)
+            if((arrOfBooks = (book*)realloc(arrOfBooks,(index+30)*sizeof(book))) == NULL)
             {
                 printf("error of realloc");
                 exit(10);
