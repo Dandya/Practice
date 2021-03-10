@@ -1,20 +1,20 @@
 [
 	{
-		"Title": "Тёмный карнавал",
+		"Title": "Black carnaval",
 		"YearOfRelease": "1947",
 		"Publishers": "ooo",
 		"Rating": "4"
 	},
    {
-      "Title": "Белый карнавал",
+      "Title": "White carnaval",
 		"YearOfRelease": "1356",
-		"Publishers": ["ааа", "bbb"],
+		"Publishers": ["aaa", "bbb"],
 		"Rating": "5"
    },
    {
-      "Title": "Жёлтый карнавал",
+      "Title": "Yellow carnaval",
 		"YearOfRelease": "1476",
-		"Publishers": ["Саша", "Котик", "Солнышко"],
+		"Publishers": ["Sasha", "Cat", "Sun"],
 		"Rating": "10"
    }
 ]
