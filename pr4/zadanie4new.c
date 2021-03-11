@@ -20,6 +20,7 @@ void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook);
 void readKey(FILE* json, book* ArrOfBooks, int* pointerOnIndexRecordedBook);
 int strEQ(char* strFirst,char * strSecond);
 void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadChar);
+void readNumber(FILE* json, char* strWithNumber);
 void writeListOfPublishersInBook(FILE* json, book* structBook);
 char* readData(FILE* json, int* PointerOnCountSymbols);
 int searchWidthOfNumber(int number);
@@ -69,7 +70,7 @@ char goToNextSignificantSymbol(FILE* json)
 {   
     char charInJSON = fgetc(json);
     
-    while(charInJSON != ':' && charInJSON != '"' && charInJSON != '[' &&  charInJSON != ']' && charInJSON != '{' && charInJSON != '}')
+    while(charInJSON != ':' && charInJSON != '"' && charInJSON != '[' &&  charInJSON != ']' && charInJSON != '{' && charInJSON != '}' && !(charInJSON >= '0' && charInJSON <= '9'))
     {
         charInJSON = fgetc(json);
     }
@@ -166,10 +167,19 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
     //"YearOfRelease"
     else if(strEQ(key, "YearOfRelease"))
     {
-        
-        if(lastReadChar == '"')  
+    
+        if(lastReadChar >= '0' &&  lastReadChar <= '9')  
         {
-            structBook->yearOfRelise = atoi(readData(json, NULL));
+            char* number = (char*)malloc(10*sizeof(char));
+            if(number == NULL)
+            {
+                printf("error of malloc\n");
+                exit(6);
+            }
+            readNumber(json, number);
+            structBook->yearOfRelise = atoi(number);
+            free(number);
+            //goToNextSignificantSymbol(json);
         }
         else
         {
@@ -198,6 +208,7 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
                 }
                 *(structBook->publishers[index]) = '\0';
                 structBook->countSimbolsInStr[index] = 1;
+
             }
 
         }
@@ -210,9 +221,18 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
     //"Rating"
     else if(strEQ(key, "Rating"))
     {
-        if(lastReadChar == '"')  
+        if(lastReadChar >= '0' &&  lastReadChar <= '9')  
         {
-            structBook->rating = atoi(readData(json, NULL));
+            char* number = (char*)malloc(10*sizeof(char));
+            if(number == NULL)
+            {
+                printf("error of malloc\n");
+                exit(6);
+            }
+            readNumber(json, number);
+            structBook->rating = atoi(number);
+            free(number);
+            fseek(json, -1, SEEK_CUR);
         }
         else
         {
@@ -220,6 +240,24 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
             exit(7);
         }
     }
+}
+/**********************************************/
+void readNumber(FILE* json, char* strWithNumber)
+{
+    fseek(json, -1, SEEK_CUR);
+    char simbolInJSON = fgetc(json);
+    int index = 0;
+    while(simbolInJSON != ',' && simbolInJSON != '}')
+    {
+        if(simbolInJSON >= '0' && simbolInJSON <= '9')
+        {
+            strWithNumber[index] = simbolInJSON;
+            index ++;
+            printf("%c\n", simbolInJSON );
+        }
+        simbolInJSON = fgetc(json);
+    }
+    strWithNumber[index] = '\0';
 }
 /**********************************************/
 void writeListOfPublishersInBook(FILE* json, book* structBook)
@@ -289,8 +327,8 @@ char* readData(FILE* json, int* PointerOnCountSymbols)
 int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks)
 {
     int widthOfNumbers = searchWidthOfNumber(countBooks) + 2;
-    int widthOfYears = 16;
-    int widthOfRating = 8;
+    int widthOfYears = 10;
+    int widthOfRating = 6;
     int widthOfPublishers [5] = {13, 13, 13, 13, 13}; //Publisher #
 
     int allCountSymbolsInStrsOnColumn[5] [countBooks];
@@ -313,9 +351,9 @@ int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks)
     int MaxElement = 0;
     for(int index = 0; index<countBooks; index++)
     {
-        if(arrOfBooks[index].countSimbolsInNameBook > widthOfName)
+        if(arrOfBooks[index].countSimbolsInNameBook-1 > widthOfName)
         {
-            widthOfName = arrOfBooks[index].countSimbolsInNameBook;
+            widthOfName = arrOfBooks[index].countSimbolsInNameBook-1;
         }
         
     }
@@ -337,15 +375,15 @@ int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks)
         exit(6);
     }
 
-    widthOfAllColumn [0] = widthOfNumbers;
-    widthOfAllColumn [1] = widthOfName;
-    widthOfAllColumn [2] = widthOfYears;
-    widthOfAllColumn [3] = widthOfPublishers [0];
-    widthOfAllColumn [4] = widthOfPublishers [1];
-    widthOfAllColumn [5] = widthOfPublishers [2];
-    widthOfAllColumn [6] = widthOfPublishers [3];
-    widthOfAllColumn [7] = widthOfPublishers [4];
-    widthOfAllColumn [8] = widthOfRating;
+    widthOfAllColumn [0] = widthOfNumbers + 2;
+    widthOfAllColumn [1] = widthOfName + 2;
+    widthOfAllColumn [2] = widthOfYears + 2;
+    widthOfAllColumn [3] = widthOfPublishers [0] + 2;
+    widthOfAllColumn [4] = widthOfPublishers [1] + 2;
+    widthOfAllColumn [5] = widthOfPublishers [2] + 2;
+    widthOfAllColumn [6] = widthOfPublishers [3] + 2;
+    widthOfAllColumn [7] = widthOfPublishers [4] + 2;
+    widthOfAllColumn [8] = widthOfRating + 2;
     return widthOfAllColumn;
 }
 /**********************************************/
@@ -356,7 +394,7 @@ int searchWidthOfNumber(int number)
     {
         module *= 10;
     }
-    return number/module;
+    return module;
 }
 /**********************************************/
 int searchIndexMaxElementInt(int* arr, int sizeArr)
@@ -406,6 +444,9 @@ int main(int argc, char** argv)
     for(int i = 0; i<9; i++)
     {
         printf("%d\n", widthOfAllColumn[i]);
+    }
+    for(int i = 0; i<3; i++){
+        printf("%d , %d", arrOfBooks[0].yearOfRelise, arrOfBooks[1].yearOfRelise);
     }
     return 0;
 }

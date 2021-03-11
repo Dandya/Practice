@@ -1,20 +1,34 @@
 [
 	{
 		"Title": "Black carnaval",
-		"YearOfRelease": "1947",
+		"YearOfRelease": 1947,
 		"Publishers": "ooo",
-		"Rating": "4"
+		"Rating": 4
 	},
    {
       "Title": "White carnaval",
-		"YearOfRelease": "1356",
+		"YearOfRelease": 1356,
 		"Publishers": ["aaa", "bbb"],
-		"Rating": "5"
+		"Rating": 5
    },
    {
       "Title": "Yellow carnaval",
-		"YearOfRelease": "1476",
-		"Publishers": ["Sasha", "Cat", "Sun"],
-		"Rating": "10"
+		"YearOfRelease": 1476,
+		"Publishers": ["Sasha", "Cat", "Sun", "Hello", "Bye"],
+		"Rating": 10
+   },
+   {
+      "Title": "Yellow carnaval",
+		"YearOfRelease": 1476,
+		"Publishers": ["Sasha", "Cat", "Sun", "Hello", "Bye"],
+		"Rating": 10
+   },
+   {
+      "Title": "Yellow carnaval",
+		"YearOfRelease": 1476,
+		"Publishers": ["iiiSashaiiiiiii", "Cat", "Sun", "Hello", "Bye"],
+		"Rating": 10
    }
+
+
 ]
