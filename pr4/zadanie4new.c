@@ -1,3 +1,7 @@
+//ключи могут быть в произвольном порядке
+//Если нет значения в ключе или в списке, то выводим ошибку
+//работать должна с любым количеством словарей
+
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -423,16 +427,43 @@ int searchIndexMaxElementInt(int* arr, int sizeArr)
 void printTableInFile(char* fileName, char** headlines, int* widthOfAllColumn)
 {
     int sumAllWidth = 0;
-    for(int index = 0; index < 9; index++)
+    for(int index = 0; index<9; index++)
     {
-        sumAllWidth += widthOfAllColumn[index];
+        sumAllWidth = widthOfAllColumn[i];
     }
     char* head = (char*)malloc((sumAllWidth + 12)*sizeof(char));
-
-
+    
 }
 /*********************************************/
-
+char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth)
+{
+    char* head = (char*)malloc((sumAllWidth + 12)*sizeof(char));
+    int indexArrInt = 0;
+    int indexLastPlus = 0;
+    int indexStr =1;
+    head[0] = '+';
+    while(indexArr != 10)
+    {
+        head[indexStr] = '-';
+        indexStr++;
+        if( indexStr - indexLastPlus -1 == widthOfAllColumn[indexArrInt])
+        {
+            head[indexStr] = '+';
+            indexLastPlus = indexStr;
+            indexStr++;
+            indexArrInt++;
+        }
+        if(indexStr>sumAllWidth)
+        {
+            printf("error make head");
+            head[indexStr] = '\0';
+            return head;
+        }
+    }
+    head[indexStr] = '\0';
+    return head;
+}
+/*********************************************/
 int main(int argc, char** argv)
 {
     int countBooks = 0;
