@@ -29,6 +29,10 @@ void writeListOfPublishersInBook(FILE* json, book* structBook);
 char* readData(FILE* json, int* PointerOnCountSymbols);
 int searchWidthOfNumber(int number);
 int searchIndexMaxElementInt(int* arr, int sizeArr);
+void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** headlines, int* widthOfAllColumn);
+char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth);
+void printHeadlines(FILE* file, char** headlines);
+void printData(FILE* file, book Struct, int* widthOfAllColumn, int numberOfData);
 /**********************************************/
 book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks)
 {
@@ -424,36 +428,52 @@ int searchIndexMaxElementInt(int* arr, int sizeArr)
     return indexMaxElement;
 }
 /*********************************************/
-void printTableInFile(char* fileName, char** headlines, int* widthOfAllColumn)
+void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** headlines, int* widthOfAllColumn)
 {
     int sumAllWidth = 0;
     for(int index = 0; index<9; index++)
     {
-        sumAllWidth = widthOfAllColumn[i];
+        sumAllWidth += widthOfAllColumn[index];
     }
-    char* head = (char*)malloc((sumAllWidth + 12)*sizeof(char));
-    
+    sumAllWidth += 12; // plus point
+    char* head = makeHeadTable(widthOfAllColumn, sumAllWidth);
+    FILE* file = fopen(fileName, "w");
+    fprintf(file, "%s\n\n", head);
+    printHeadlines(file, headlines);
+    fprintf(file, "\n\n");
+    fprintf(file, "%s\n\n", head);
+    for(int index = 0; index<countBooks; index++)
+    {
+        printData(file, arrOfBooks[index], widthOfAllColumn, index+1);
+        fprintf(file, "\n\n");
+        fprintf(file, "%s\n\n", head);
+    }
+    free(head);
+    fclose(file);
 }
 /*********************************************/
 char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth)
 {
-    char* head = (char*)malloc((sumAllWidth + 12)*sizeof(char));
+    char* head = (char*)malloc((sumAllWidth)*sizeof(char)); //with point
+    printf("SumAllW %d\n", sumAllWidth);
     int indexArrInt = 0;
     int indexLastPlus = 0;
     int indexStr =1;
     head[0] = '+';
-    while(indexArr != 10)
+    while(indexArrInt != 9)
     {
         head[indexStr] = '-';
         indexStr++;
-        if( indexStr - indexLastPlus -1 == widthOfAllColumn[indexArrInt])
+        printf("%d\n",indexStr);
+        if(indexStr-indexLastPlus-1 == widthOfAllColumn[indexArrInt])
         {
             head[indexStr] = '+';
             indexLastPlus = indexStr;
             indexStr++;
             indexArrInt++;
+            printf("app\n");
         }
-        if(indexStr>sumAllWidth)
+        if(indexStr>sumAllWidth+1)
         {
             printf("error make head");
             head[indexStr] = '\0';
@@ -464,12 +484,43 @@ char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth)
     return head;
 }
 /*********************************************/
+void printHeadlines(FILE* file, char** headlines)
+{
+    
+    fprintf(file, "|%s",headlines[0]);
+    fprintf(file, "|%s",headlines[1]);
+    fprintf(file, "|%s",headlines[2]);
+    fprintf(file, "|%s",headlines[3]);
+    fprintf(file, "|%s",headlines[4]);
+    fprintf(file, "|%s",headlines[5]);
+    fprintf(file, "|%s",headlines[6]);
+    fprintf(file, "|%s",headlines[7]);
+    fprintf(file, "|%s|",headlines[8]);
+}
+/*********************************************/
+void printData(FILE* file, book Struct, int* widthOfAllColumn, int numberOfData)
+{
+    fprintf(file, "|%*d",widthOfAllColumn[0], numberOfData);
+    fprintf(file, "|%s",Struct.nameBook);
+    fprintf(file, "|%*d",widthOfAllColumn[2], Struct.yearOfRelise );
+    fprintf(file, "|%s",Struct.publishers[0]);
+    fprintf(file, "|%s",Struct.publishers[1]);
+    fprintf(file, "|%s",Struct.publishers[2]);
+    fprintf(file, "|%s",Struct.publishers[3]);
+    fprintf(file, "|%s",Struct.publishers[4]);
+    fprintf(file, "|%*d|",widthOfAllColumn[8], Struct.rating);
+}
+/*********************************************/
 int main(int argc, char** argv)
 {
     int countBooks = 0;
     book* arrOfBooks = createArrOfBooksFromJSON("data.json", &countBooks);
     int* widthOfAllColumn = searchWidthOfAllColumn(arrOfBooks, countBooks);
-    for(int i = 0; i<3; i++){
+    char* headlines [9] = {"Title","YearOfRelease","Publisher 1", "Publisher 2", "Publisher 3", "Publisher 4", "Publisher 5", "Rating"};
+    printTableInFile("a.txt", arrOfBooks, countBooks, headlines, widthOfAllColumn);
+    
+    
+    /*for(int i = 0; i<3; i++){
         printf("cis - %d, %d, %d, %d, %d\n", arrOfBooks[i].countSimbolsInStr[0], arrOfBooks[i].countSimbolsInStr[1], arrOfBooks[i].countSimbolsInStr[2], arrOfBooks[i].countSimbolsInStr[3], arrOfBooks[i].countSimbolsInStr[4]);
     }
     for(int i = 0; i<9; i++)
@@ -478,7 +529,7 @@ int main(int argc, char** argv)
     }
     for(int i = 0; i<3; i++){
         printf("%d , %d", arrOfBooks[0].yearOfRelise, arrOfBooks[1].yearOfRelise);
-    }
+    }*/
     return 0;
 }
 /**********************************************/
