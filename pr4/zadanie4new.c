@@ -27,12 +27,17 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
 void readNumber(FILE* json, char* strWithNumber);
 void writeListOfPublishersInBook(FILE* json, book* structBook);
 char* readData(FILE* json, int* PointerOnCountSymbols);
+int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks, int* lenTitle);
 int searchWidthOfNumber(int number);
 int searchIndexMaxElementInt(int* arr, int sizeArr);
-void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** headlines, int* widthOfAllColumn);
+void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** headlines, int* lenTitle, int* widthOfAllColumn);
 char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth);
-void printHeadlines(FILE* file, char** headlines);
+void printHeadlines(FILE* file, char** headlines, int* lenStr, int countHeadlines, int* widthOfAllColumn);
+int strLen(char* str);
+void printSpase(FILE* file, int countSpase);
 void printData(FILE* file, book Struct, int* widthOfAllColumn, int numberOfData);
+void printStr(FILE* file, int widthColumn, char* str, int lenStr);
+void printNumber(FILE* file, int number, int width);
 /**********************************************/
 book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks)
 {
@@ -332,12 +337,13 @@ char* readData(FILE* json, int* PointerOnCountSymbols)
     return data;
 }
 /**********************************************/
-int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks)
+int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks, int* lenTitle)
 {
-    int widthOfNumbers = searchWidthOfNumber(countBooks) + 2;
-    int widthOfYears = 10;
-    int widthOfRating = 6;
-    int widthOfPublishers [5] = {13, 13, 13, 13, 13}; //Publisher #
+    int widthOfNumbers = searchWidthOfNumber(countBooks);
+    widthOfNumbers = (widthOfNumbers >= lenTitle[0] ? widthOfNumbers : lenTitle[0])  + 2;
+    int widthOfYears = lenTitle[2];
+    int widthOfRating = lenTitle[8];
+    int widthOfPublishers [5] = {lenTitle[3], lenTitle[4], lenTitle[5], lenTitle[6], lenTitle[7]}; //Publisher #
 
     int allCountSymbolsInStrsOnColumn[5] [countBooks];
     for(int indexColumn = 0, indexBook = 0 ; indexBook<countBooks; indexBook++)
@@ -398,11 +404,13 @@ int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks)
 int searchWidthOfNumber(int number)
 {
     int module = 1;
+    int degree = 0;
     while(number/module >= 10)
     {
         module *= 10;
+        degree++;
     }
-    return module;
+    return degree+1;
 }
 /**********************************************/
 int searchIndexMaxElementInt(int* arr, int sizeArr)
@@ -428,7 +436,7 @@ int searchIndexMaxElementInt(int* arr, int sizeArr)
     return indexMaxElement;
 }
 /*********************************************/
-void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** headlines, int* widthOfAllColumn)
+void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** headlines, int* lenTitle, int* widthOfAllColumn)
 {
     int sumAllWidth = 0;
     for(int index = 0; index<9; index++)
@@ -439,7 +447,7 @@ void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** h
     char* head = makeHeadTable(widthOfAllColumn, sumAllWidth);
     FILE* file = fopen(fileName, "w");
     fprintf(file, "%s\n\n", head);
-    printHeadlines(file, headlines);
+    printHeadlines(file, headlines, lenTitle , 9,widthOfAllColumn);
     fprintf(file, "\n\n");
     fprintf(file, "%s\n\n", head);
     for(int index = 0; index<countBooks; index++)
@@ -455,7 +463,6 @@ void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** h
 char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth)
 {
     char* head = (char*)malloc((sumAllWidth)*sizeof(char)); //with point
-    printf("SumAllW %d\n", sumAllWidth);
     int indexArrInt = 0;
     int indexLastPlus = 0;
     int indexStr =1;
@@ -471,7 +478,6 @@ char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth)
             indexLastPlus = indexStr;
             indexStr++;
             indexArrInt++;
-            printf("app\n");
         }
         if(indexStr>sumAllWidth+1)
         {
@@ -484,10 +490,19 @@ char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth)
     return head;
 }
 /*********************************************/
-void printHeadlines(FILE* file, char** headlines)
+void printHeadlines(FILE* file, char** headlines, int* lenStr, int countHeadlines, int* widthOfAllColumn)
 {
-    
-    fprintf(file, "|%s",headlines[0]);
+    for(int index = 0; index<countHeadlines; index++)
+    {
+        fputc('|',file);
+        int countALLSpace = widthOfAllColumn[index]-lenStr[index];
+        printf("countALLSpace %d = %d, lenStr = %d\n", index, countALLSpace, lenStr[index]);
+        printSpase(file ,countALLSpace/2);
+        fprintf(file, "%s", headlines[index]);
+        printSpase(file ,countALLSpace%2==0?countALLSpace/2:countALLSpace/2+1);
+    }
+    fputc('|', file);
+    /*fprintf(file, "|%s",headlines[0]);
     fprintf(file, "|%s",headlines[1]);
     fprintf(file, "|%s",headlines[2]);
     fprintf(file, "|%s",headlines[3]);
@@ -495,29 +510,103 @@ void printHeadlines(FILE* file, char** headlines)
     fprintf(file, "|%s",headlines[5]);
     fprintf(file, "|%s",headlines[6]);
     fprintf(file, "|%s",headlines[7]);
-    fprintf(file, "|%s|",headlines[8]);
+    fprintf(file, "|%s|",headlines[8]);*/
+}
+/*********************************************/
+int strLen(char* str)
+{
+    if(str == NULL)
+    {
+        return -1;
+    }
+    int index = 0;
+    while(str[index] != '\0')
+    {
+        index++;
+    }
+    return index;
+}
+/*********************************************/
+void printSpase(FILE* file, int countSpase)
+{
+    for(int i = 1; i<=countSpase; i++)
+    {
+        fprintf(file, " ");
+    }
 }
 /*********************************************/
 void printData(FILE* file, book Struct, int* widthOfAllColumn, int numberOfData)
 {
-    fprintf(file, "|%*d",widthOfAllColumn[0], numberOfData);
-    fprintf(file, "|%s",Struct.nameBook);
-    fprintf(file, "|%*d",widthOfAllColumn[2], Struct.yearOfRelise );
-    fprintf(file, "|%s",Struct.publishers[0]);
-    fprintf(file, "|%s",Struct.publishers[1]);
-    fprintf(file, "|%s",Struct.publishers[2]);
-    fprintf(file, "|%s",Struct.publishers[3]);
-    fprintf(file, "|%s",Struct.publishers[4]);
-    fprintf(file, "|%*d|",widthOfAllColumn[8], Struct.rating);
+    //print first colomn
+    printNumber(file, numberOfData, widthOfAllColumn[0]);
+    //print title
+    printStr(file, widthOfAllColumn[1], Struct.nameBook, Struct.countSimbolsInNameBook);
+    //print YearOfRelise
+    printNumber(file, Struct.yearOfRelise, widthOfAllColumn[2]);
+    //print Publishers
+    for(int index = 0; index < 5; index++)
+    {
+        printStr(file, widthOfAllColumn[3 + index], Struct.publishers[index], Struct.countSimbolsInStr[index]);
+    }
+    //print rating
+    printNumber(file, Struct.rating, widthOfAllColumn[8]);
+    fputc('|', file);
+}
+/*********************************************/
+void printStr(FILE* file, int widthColumn, char* str, int lenStr)
+{
+        fputc('|',file);
+        int countALLSpace = widthColumn-lenStr;
+        printSpase(file ,countALLSpace/2);
+        printf("%ld", str);
+        if(str[0] != '\0')
+        {
+            fprintf(file, "%s", str);
+        }
+        else
+        {
+            fputc(' ', file);
+        }
+        printSpase(file ,countALLSpace%2==0?countALLSpace/2:countALLSpace/2+1);
+}
+/*********************************************/
+void printNumber(FILE* file, int number, int width)
+{
+    int widthNumber = searchWidthOfNumber(number); 
+    fprintf(file, "|%*d",(width-widthNumber)/2 + widthNumber, number);
+    printf(" wN = %d, number = %d\n", widthNumber, number);
+    if(width%2==1 && widthNumber%2 == 1)
+    {
+        printSpase(file, (width-widthNumber)/2);
+    }
+    else if(width%2 == 0 && widthNumber%2 == 0)
+    {
+        printSpase(file, (width-widthNumber)/2);
+    }
+    else if(width%2 == 1 && widthNumber%2 == 0)
+    {
+        printSpase(file, (width-widthNumber)/2+1);
+    }
+    else if(width%2 == 0 && widthNumber%2 == 1)
+    {
+        printSpase(file, (width-widthNumber)/2 + 1);
+    }
+   // printSpase(file ,((width-widthNumber)/2)%2 == 0?(width-widthNumber)/2:(width-widthNumber)/2);
 }
 /*********************************************/
 int main(int argc, char** argv)
 {
     int countBooks = 0;
     book* arrOfBooks = createArrOfBooksFromJSON("data.json", &countBooks);
-    int* widthOfAllColumn = searchWidthOfAllColumn(arrOfBooks, countBooks);
-    char* headlines [9] = {"Title","YearOfRelease","Publisher 1", "Publisher 2", "Publisher 3", "Publisher 4", "Publisher 5", "Rating"};
-    printTableInFile("a.txt", arrOfBooks, countBooks, headlines, widthOfAllColumn);
+    char* headlines [9] = {"N","Title","YearOfRelise","Publisher 1", "Publisher 2", "Publisher 3", "Publisher 4", "Publisher 5", "Rating"};
+    int lenStr[9];
+    for(int index = 0; index<9; index++)
+    {
+        lenStr[index] = strLen(headlines[index]);
+    }
+
+    int* widthOfAllColumn = searchWidthOfAllColumn(arrOfBooks, countBooks, lenStr);
+    printTableInFile("a.txt", arrOfBooks, countBooks, headlines, lenStr, widthOfAllColumn);
     
     
     /*for(int i = 0; i<3; i++){
