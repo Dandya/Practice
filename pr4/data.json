@@ -6,13 +6,13 @@
       "Publishers": "ooo"
 	},
    {
-      "Title": "White carnaval",
-		"Rating": 5,
+      "Title": "Белый карнавал",
+      "Rating": 5,
 		"Publishers": ["aaa", "bbb", "Ray Bredbery"],
       "YearOfRelease": 1356
    },
    {
-      "Publishers": ["Sasha", "Cat", "Sun", "Hello", "Bye"],
+      "Publishers": ["Саша", "Cat", "Sun", "Hello", "Bye"],
 		"YearOfRelease": null,
 		"Title": "Yellow carnaval",
 		"Rating": "10"
@@ -26,7 +26,7 @@
    {
       "Rating": null,
 		"YearOfRelease": 1476,
-		"Publishers": ["iiiSashaiiiiiii", "Cat", "Sun", "Hello", "Bye"],
+		"Publishers": ["iiiSashaИИiiiii", "Cat", "Sun", "Hello", "Bye"],
       "Title": "Yellow carnavaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal"
    }
 

@@ -110,7 +110,7 @@ book* listOfDictJSON(FILE* json, book* arrOfBooks, int* countBooks)
 /**********************************************/
 void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook)
 {
-    char result = goToNextSignificantSymbol(json
+    char result = goToNextSignificantSymbol(json);
     int countKey = 0;
     while(result == '"') 
     {
@@ -521,12 +521,7 @@ void printHeadlines(FILE* file, char** headlines, int* lenStr, int countHeadline
 {
     for(int index = 0; index<countHeadlines; index++)
     {
-        fputc('|',file);
-        int countALLSpace = widthOfAllColumn[index]-lenStr[index];
-        printf("countALLSpace %d = %d, lenStr = %d\n", index, countALLSpace, lenStr[index]);
-        printSpase(file ,countALLSpace/2);
-        fprintf(file, "%s", headlines[index]);
-        printSpase(file ,countALLSpace%2==0?countALLSpace/2:countALLSpace/2+1);
+        printStr(file, widthOfAllColumn[index], headlines[index], lenStr[index]);
     }
     fputc('|', file);
     /*fprintf(file, "|%s",headlines[0]);
@@ -583,9 +578,18 @@ void printData(FILE* file, book Struct, int* widthOfAllColumn, int numberOfData)
 void printStr(FILE* file, int widthColumn, char* str, int lenStr)
 {
         fputc('|',file);
+        int index = 0;
+        while(str[index] != '\0' && str[index+1] != '\0')
+        {
+            if((int)str[index] == -48 && (int)str[index+1] >= -80 && (int)str[index+1] <= -65 || (int)str[index] == -47 && (int)str[index+1] >= -128 && (int)str[index+1] <= -111 && (int)str[index+1] != -112 || (int)str[index] == -48 && (int)str[index+1] >= -112 && (int)str[index+1] <= -81 || (int)str[index] == -48 && (int)str[index+1] == -127) // Поддержка русского языка
+            {
+                lenStr--;
+                printf("OK");
+            }
+            index++;
+        }
         int countALLSpace = widthColumn-lenStr;
         printSpase(file ,countALLSpace/2);
-        printf("%ld", str);
         if(str[0] != '\0')
         {
             fprintf(file, "%s", str);
