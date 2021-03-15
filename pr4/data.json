@@ -1,33 +1,33 @@
 [
 	{
-		"Title": "Black carnaval",
+		"Title": null,
 		"YearOfRelease": 1947,
-		"Publishers": "ooo",
-		"Rating": 4
+		"Rating": null,
+      "Publishers": "ooo"
 	},
    {
       "Title": "White carnaval",
-		"YearOfRelease": 1356,
-		"Publishers": ["aaa", "bbb"],
-		"Rating": 5
+		"Rating": 5,
+		"Publishers": ["aaa", "bbb", "Ray Bredbery"],
+      "YearOfRelease": 1356
+   },
+   {
+      "Publishers": ["Sasha", "Cat", "Sun", "Hello", "Bye"],
+		"YearOfRelease": null,
+		"Title": "Yellow carnaval",
+		"Rating": "10"
    },
    {
       "Title": "Yellow carnaval",
-		"YearOfRelease": 1476,
-		"Publishers": ["Sasha", "Cat", "Sun", "Hello", "Bye"],
+      "Publishers": ["Sasha", "Cat", "Sun", "Hello", "Bye"],
+		"YearOfRelease": "1476",
 		"Rating": 10
    },
    {
-      "Title": "Yellow carnaval",
-		"YearOfRelease": 1476,
-		"Publishers": ["Sasha", "Cat", "Sun", "Hello", "Bye"],
-		"Rating": 10
-   },
-   {
-      "Title": "Yellow carnaval",
+      "Rating": null,
 		"YearOfRelease": 1476,
 		"Publishers": ["iiiSashaiiiiiii", "Cat", "Sun", "Hello", "Bye"],
-		"Rating": 10
+      "Title": "Yellow carnavaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal"
    }
 
 

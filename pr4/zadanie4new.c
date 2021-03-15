@@ -21,7 +21,6 @@ book* beginReadJSON(FILE* json, book* arrOfBooks, int* countBooks);
 char goToNextSignificantSymbol(FILE* json);
 book* listOfDictJSON(FILE* json, book* arrOfBooks, int* countBooks);
 void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook);
-void readKey(FILE* json, book* ArrOfBooks, int* pointerOnIndexRecordedBook);
 int strEQ(char* strFirst,char * strSecond);
 void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadChar);
 void readNumber(FILE* json, char* strWithNumber);
@@ -83,7 +82,7 @@ char goToNextSignificantSymbol(FILE* json)
 {   
     char charInJSON = fgetc(json);
     
-    while(charInJSON != ':' && charInJSON != '"' && charInJSON != '[' &&  charInJSON != ']' && charInJSON != '{' && charInJSON != '}' && !(charInJSON >= '0' && charInJSON <= '9'))
+    while(charInJSON != ':' && charInJSON != '"' && charInJSON != '[' &&  charInJSON != ']' && charInJSON != '{' && charInJSON != '}' && !(charInJSON >= '0' && charInJSON <= '9') && charInJSON != 'n')
     {
         charInJSON = fgetc(json);
     }
@@ -118,30 +117,31 @@ void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook)
     char result = goToNextSignificantSymbol(json);
     while(result == '"') //dungerous
     {
-        readKey(json, arrOfBooks,pointerOnIndexRecordedBook);
+        //char* key = readKey(json, arrOfBooks,pointerOnIndexRecordedBook);
+        char* key = readData(json, NULL);
         result = goToNextSignificantSymbol(json);
         printf("char - %c\n", result);
+        if(result == ':')
+        {
+            result = goToNextSignificantSymbol(json);
+            saveValueInKeyJSON(json, key, arrOfBooks + *pointerOnIndexRecordedBook, result);
+            fseek(json, -1, SEEK_CUR);
+            if((result = fgetc(json)) == '}')
+            {
+                break;
+            }
+            result = goToNextSignificantSymbol(json);
+        }
+        else
+        {
+            printf("error: strange things\n");
+            exit(8);
+        }
     }
     if(result != '}')
     {
         printf("error of dictJSON");
         exit(9);
-    }
-}
-/**********************************************/
-void readKey(FILE* json, book* ArrOfBooks, int* pointerOnIndexRecordedBook)
-{
-    char* key = readData(json, NULL);
-    char result = goToNextSignificantSymbol(json);
-    if(result == ':')
-    {
-        result = goToNextSignificantSymbol(json);
-        saveValueInKeyJSON(json, key, ArrOfBooks + *pointerOnIndexRecordedBook, result);
-    }
-    else
-    {
-        printf("error: strange things\n");
-        exit(8);
     }
 }
 /**********************************************/
@@ -160,7 +160,6 @@ int strEQ(char* strFirst,char * strSecond)
     return 0;
 }
 /**********************************************/
-
 void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadChar)
 { 
     //"Title","YearOfRelease","Publishers","Rating"
@@ -169,19 +168,22 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
         if(lastReadChar == '"')  
         {
             structBook->nameBook = readData(json, &structBook->countSimbolsInNameBook);
-            printf("c s - %d\n", structBook->countSimbolsInNameBook );
+        }
+        else if( (((lastReadChar == 'n') && fgetc(json) == 'u') && fgetc(json) == 'l') && fgetc(json) == 'l' ) 
+        {
+            structBook->nameBook = "untitled";
+            structBook->countSimbolsInNameBook = 8;
         }
         else
         {
-            printf("error of lastReadСhar");
+            printf("error of lastReadСhar read Title");
             exit(7);
         }
     }
-    //"YearOfRelease"
+    //"YearOfRelease" and "Rating"
     else if(strEQ(key, "YearOfRelease"))
     {
-    
-        if(lastReadChar >= '0' &&  lastReadChar <= '9')  
+        if(lastReadChar >= '0' &&  lastReadChar <= '9' || lastReadChar == '"')  
         {
             char* number = (char*)malloc(10*sizeof(char));
             if(number == NULL)
@@ -191,12 +193,16 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
             }
             readNumber(json, number);
             structBook->yearOfRelise = atoi(number);
-            free(number);
+            free(number); 
             //goToNextSignificantSymbol(json);
+        }
+        else if((((lastReadChar == 'n') && fgetc(json) == 'u') && fgetc(json) == 'l') && fgetc(json) == 'l')
+        {
+            structBook->yearOfRelise = 0;
         }
         else
         {
-            printf("error of lastReadСhar");
+            printf("error of lastReadСhar read YearOfRelease");
             exit(7);
         }
     }
@@ -221,20 +227,32 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
                 }
                 *(structBook->publishers[index]) = '\0';
                 structBook->countSimbolsInStr[index] = 1;
-
             }
-
+        }
+        else if((((lastReadChar == 'n') && fgetc(json) == 'u') && fgetc(json) == 'l') && fgetc(json) == 'l')
+        {
+            int index = 0;
+            while(index != 5)
+            {
+                if((structBook->publishers[index] = (char*)malloc(1*sizeof(char))) == NULL)
+                {
+                    printf("error malloc\n");
+                    exit(6);
+                }
+                *(structBook->publishers[index]) = '\0';
+                structBook->countSimbolsInStr[index] = 1;
+                index++;
+            }
         }
         else
         {
-            printf("error of lastReadСhar");
+            printf("error of lastReadСhar read Publishers ");
             exit(7);
         }
     }
-    //"Rating"
-    else if(strEQ(key, "Rating"))
+    else if (strEQ(key, "Rating"))
     {
-        if(lastReadChar >= '0' &&  lastReadChar <= '9')  
+        if(lastReadChar >= '0' &&  lastReadChar <= '9' || lastReadChar == '"')  
         {
             char* number = (char*)malloc(10*sizeof(char));
             if(number == NULL)
@@ -244,14 +262,23 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
             }
             readNumber(json, number);
             structBook->rating = atoi(number);
-            free(number);
-            fseek(json, -1, SEEK_CUR);
+            free(number); 
+            //goToNextSignificantSymbol(json);
+        }
+        else if((((lastReadChar == 'n') && fgetc(json) == 'u') && fgetc(json) == 'l') && fgetc(json) == 'l')
+        {
+            structBook->rating = 0;
         }
         else
         {
-            printf("error of lastReadСhar");
+            printf("error of lastReadСhar read YearOfRelease");
             exit(7);
         }
+    } 
+    else
+    {
+        printf("error: unknown key\n");
+        exit(12);
     }
 }
 /**********************************************/
@@ -259,14 +286,18 @@ void readNumber(FILE* json, char* strWithNumber)
 {
     fseek(json, -1, SEEK_CUR);
     char simbolInJSON = fgetc(json);
+    if(simbolInJSON == '"')
+    {
+        simbolInJSON = fgetc(json);
+    }
     int index = 0;
-    while(simbolInJSON != ',' && simbolInJSON != '}')
+    while(simbolInJSON != ',' && simbolInJSON != '}' && simbolInJSON != '"')
     {
         if(simbolInJSON >= '0' && simbolInJSON <= '9')
         {
             strWithNumber[index] = simbolInJSON;
             index ++;
-            printf("%c\n", simbolInJSON );
+            //printf("%c\n", simbolInJSON );
         }
         simbolInJSON = fgetc(json);
     }
