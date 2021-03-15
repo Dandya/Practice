@@ -1,7 +1,3 @@
-//ключи могут быть в произвольном порядке
-//Если нет значения в ключе или в списке, то выводим ошибку
-//работать должна с любым количеством словарей
-
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -114,17 +110,17 @@ book* listOfDictJSON(FILE* json, book* arrOfBooks, int* countBooks)
 /**********************************************/
 void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook)
 {
-    char result = goToNextSignificantSymbol(json);
-    while(result == '"') //dungerous
+    char result = goToNextSignificantSymbol(json
+    int countKey = 0;
+    while(result == '"') 
     {
-        //char* key = readKey(json, arrOfBooks,pointerOnIndexRecordedBook);
         char* key = readData(json, NULL);
         result = goToNextSignificantSymbol(json);
-        printf("char - %c\n", result);
         if(result == ':')
         {
             result = goToNextSignificantSymbol(json);
             saveValueInKeyJSON(json, key, arrOfBooks + *pointerOnIndexRecordedBook, result);
+            countKey++;
             fseek(json, -1, SEEK_CUR);
             if((result = fgetc(json)) == '}')
             {
@@ -138,7 +134,7 @@ void dictJSON(FILE* json, book* arrOfBooks, int* pointerOnIndexRecordedBook)
             exit(8);
         }
     }
-    if(result != '}')
+    if(result != '}' || countKey != 4)
     {
         printf("error of dictJSON");
         exit(9);
