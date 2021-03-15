@@ -625,6 +625,11 @@ void printNumber(FILE* file, int number, int width)
    // printSpase(file ,((width-widthNumber)/2)%2 == 0?(width-widthNumber)/2:(width-widthNumber)/2);
 }
 /*********************************************/
+void sortArrOfBooksRating(book* arrOfBooks, char mode)
+{
+    //Selection sort    
+}
+/*********************************************/
 int main(int argc, char** argv)
 {
     int countBooks = 0;
@@ -635,21 +640,10 @@ int main(int argc, char** argv)
     {
         lenStr[index] = strLen(headlines[index]);
     }
-
+    
     int* widthOfAllColumn = searchWidthOfAllColumn(arrOfBooks, countBooks, lenStr);
     printTableInFile("a.txt", arrOfBooks, countBooks, headlines, lenStr, widthOfAllColumn);
     
-    
-    /*for(int i = 0; i<3; i++){
-        printf("cis - %d, %d, %d, %d, %d\n", arrOfBooks[i].countSimbolsInStr[0], arrOfBooks[i].countSimbolsInStr[1], arrOfBooks[i].countSimbolsInStr[2], arrOfBooks[i].countSimbolsInStr[3], arrOfBooks[i].countSimbolsInStr[4]);
-    }
-    for(int i = 0; i<9; i++)
-    {
-        printf("%d\n", widthOfAllColumn[i]);
-    }
-    for(int i = 0; i<3; i++){
-        printf("%d , %d", arrOfBooks[0].yearOfRelise, arrOfBooks[1].yearOfRelise);
-    }*/
     return 0;
 }
 /**********************************************/
