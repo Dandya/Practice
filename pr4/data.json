@@ -1,13 +1,15 @@
 [
 	{
-		"Title": null,
-		"YearOfRelease": 1947,
-		"Rating": null,
+		"Title": "Мёртвые души",
+      "Author": "Гоголь",
+		"YearOfRelease": 1847,
+		"Rating": 1947,
       "Publishers": "ooo"
 	},
    {
       "Title": "Белый карнавал",
-      "Rating": 5,
+      "Rating": 1356,
+      "Author": "Гоголь",
 		"Publishers": ["aaa", "bbb", "Ray Bredbery"],
       "YearOfRelease": 1356
    },
@@ -15,19 +17,22 @@
       "Publishers": ["Саша", "Cat", "Sun", "Hello", "Bye"],
 		"YearOfRelease": null,
 		"Title": "Yellow carnaval",
-		"Rating": "10"
+      "Author": "Гоголь",
+		"Rating": null
    },
    {
       "Title": "Yellow carnaval",
       "Publishers": ["Sasha", "Cat", "Sun", "Hello", "Bye"],
+      "Author": "Гоголь",
 		"YearOfRelease": "1476",
-		"Rating": 10
+		"Rating": 1476
    },
    {
-      "Rating": null,
+      "Rating": "1476",
+      "Author": "Гоголь",
 		"YearOfRelease": 1476,
 		"Publishers": ["iiiSashaИИiiiii", "Cat", "Sun", "Hello", "Bye"],
-      "Title": "Yellow carnavaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal"
+      "Title": "Муму"
    }
 
 
