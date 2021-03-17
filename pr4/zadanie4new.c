@@ -34,6 +34,7 @@ int strLen(char* str);
 void printSpase(FILE* file, int countSpase);
 void printData(FILE* file, book Struct, int* widthOfAllColumn, int numberOfData);
 void printStr(FILE* file, int widthColumn, char* str, int lenStr);
+void printStrWithoutSpaceInStart(FILE* file, int widthColumn, char* str, int lenStr);
 void printNumber(FILE* file, int number, int width);
 void sortArrOfBooksRating(book* arrOfBooks, int countBooks);
 void sortArrOfBooksYear(book* arrOfBooks, int countBooks);
@@ -42,7 +43,31 @@ int* searchIndexesOfBooksByAuthor(book* arrOfBooks, int countBooks, char* author
 int* searchIndexesOfBooksByPublisher(book* arrOfBooks, int countBooks, char* publisher);
 int* searchIndexesOfBooksByYear(book* arrOfBooks, int countBooks, int year);
 int* searchIndexesOfBooksByRating(book* arrOfBooks, int countBooks, int rating);
-int clear_input_buffer(void);
+int clearInputBuffer(void);
+/**********************************************/
+int checkInputData(int argc, char** argv)
+{
+    if(argc == 3 || argc == 2)
+    {
+        int index = 0;
+        while(argv[1][index] != '\0')
+        {
+            index++;
+        }
+        if(argv[1][index-5] == '.' &&  argv[1][index-4] == 'j' && argv[1][index-3] == 's' && argv[1][index-2] == 'o' && argv[1][index-1] == 'n')
+        {
+            return 1;
+        }
+        else 
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        return 0;
+    }
+}
 /**********************************************/
 book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks)
 {
@@ -300,7 +325,6 @@ void saveValueInKeyJSON(FILE* json, char* key, book* structBook, char lastReadCh
             readNumber(json, number);
             structBook->rating = atoi(number);
             free(number); 
-            //goToNextSignificantSymbol(json);
         }
         else if((((lastReadChar == 'n') && fgetc(json) == 'u') && fgetc(json) == 'l') && fgetc(json) == 'l')
         {
@@ -334,7 +358,6 @@ void readNumber(FILE* json, char* strWithNumber)
         {
             strWithNumber[index] = simbolInJSON;
             index ++;
-            //printf("%c\n", simbolInJSON );
         }
         simbolInJSON = fgetc(json);
     }
@@ -406,21 +429,9 @@ int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks, int* lenTitle)
     widthOfNumbers = (widthOfNumbers >= lenTitle[0] ? widthOfNumbers : lenTitle[0]);
     int widthOfYears = lenTitle[3] >= 4 ? lenTitle[3] : 4;
     int widthOfRating = lenTitle[8];
-    int widthOfPublishers [5] = {lenTitle[3], lenTitle[4], lenTitle[5], lenTitle[6], lenTitle[7]}; //Publisher #
+    int widthOfPublishers [5] = {lenTitle[3], lenTitle[4], lenTitle[5], lenTitle[6], lenTitle[7]}; 
 
-    /*int allCountSymbolsInStrsOnColumn[5] [countBooks]; //What is it?
-    for(int indexColumn = 0, indexBook = 0 ; indexBook<countBooks; indexBook++)
-    {
-        allCountSymbolsInStrsOnColumn[indexColumn] [indexBook] = arrOfBooks[indexBook].countSimbolsInStr[indexColumn];
-        if(indexBook+1 == countBooks && indexColumn != 4)
-        {
-            indexColumn++;
-            indexBook = -1;
-        }
-    }*/
-    
-    
-    int widthOfName = lenTitle[1]; //Title //change
+    int widthOfName = lenTitle[1]; //Title 
     for(int index = 0; index<countBooks; index++)
     {
         if(arrOfBooks[index].countSimbolsInNameBook > widthOfName)
@@ -430,7 +441,7 @@ int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks, int* lenTitle)
         
     }
     
-    int widthOfAuthor = lenTitle[2]; //change
+    int widthOfAuthor = lenTitle[2]; 
     for(int index = 0; index<countBooks; index++)
     {
         if(arrOfBooks[index].countSimbolsInAuthor > widthOfAuthor)
@@ -439,7 +450,8 @@ int* searchWidthOfAllColumn(book* arrOfBooks, int countBooks, int* lenTitle)
         }
         
     }
-    int allCountSymbolsInStrsOnColumn[5] [countBooks]; //What is it?
+
+    int allCountSymbolsInStrsOnColumn[5] [countBooks]; 
     for(int indexColumn = 0, indexBook = 0 ; indexBook<countBooks; indexBook++)
     {
         allCountSymbolsInStrsOnColumn[indexColumn] [indexBook] = arrOfBooks[indexBook].countSimbolsInStr[indexColumn];
@@ -542,7 +554,12 @@ void printTableInFile(char* fileName, book* arrOfBooks, int countBooks, char** h
 /*********************************************/
 char* makeHeadTable(int* widthOfAllColumn, int sumAllWidth)
 {
-    char* head = (char*)malloc((sumAllWidth)*sizeof(char)); //with point
+    char* head = (char*)malloc((sumAllWidth)*sizeof(char));
+    if (head == NULL)
+    {
+        printf("error of malloc\n");
+        exit(6);
+    }
     int indexArrInt = 0;
     int indexLastPlus = 0;
     int indexStr =1;
@@ -589,7 +606,7 @@ int strLen(char* str)
     int len = 0;
     while(str[index] != '\0')
     {
-        if(!((int)str[index] == -48 && (int)str[index+1] >= -80 && (int)str[index+1] <= -65 || (int)str[index] == -47 && (int)str[index+1] >= -128 && (int)str[index+1] <= -111 && (int)str[index+1] != -112 || (int)str[index] == -48 && (int)str[index+1] >= -112 && (int)str[index+1] <= -81 || (int)str[index] == -48 && (int)str[index+1] == -127 || (int)str[index] == -30 && (int)str[index+1] == -124 || (int)str[index] == -124 && (int)str[index+1] == -106))
+        if(!((int)str[index] == -48 && (int)str[index+1] >= -80 && (int)str[index+1] <= -65 || (int)str[index] == -47 && (int)str[index+1] >= -128 && (int)str[index+1] <= -111 && (int)str[index+1] != -112 || (int)str[index] == -48 && (int)str[index+1] >= -112 && (int)str[index+1] <= -81 || (int)str[index] == -48 && (int)str[index+1] == -127 || (int)str[index] == -30 && (int)str[index+1] == -124 || (int)str[index] == -124 && (int)str[index+1] == -106)) //two byte rus lang :^)
         {
            len++; 
         }
@@ -613,10 +630,10 @@ void printData(FILE* file, book Struct, int* widthOfAllColumn, int numberOfData)
     printNumber(file, numberOfData, widthOfAllColumn[0]);
     //print Title
     fputc('|',file);
-    printStr(file, widthOfAllColumn[1], Struct.nameBook, Struct.countSimbolsInNameBook);
+    printStrWithoutSpaceInStart(file, widthOfAllColumn[1], Struct.nameBook, Struct.countSimbolsInNameBook);
     //print Author
     fputc('|',file);
-    printStr(file, widthOfAllColumn[2], Struct.author, Struct.countSimbolsInAuthor);
+    printStrWithoutSpaceInStart(file, widthOfAllColumn[2], Struct.author, Struct.countSimbolsInAuthor);
     //print YearOfRelise
     fputc('|',file);
     printNumber(file, Struct.yearOfRelise, widthOfAllColumn[3]);
@@ -624,7 +641,7 @@ void printData(FILE* file, book Struct, int* widthOfAllColumn, int numberOfData)
     for(int index = 0; index < 5; index++)
     {
         fputc('|',file);
-        printStr(file, widthOfAllColumn[4 + index], Struct.publishers[index], Struct.countSimbolsInStr[index]);
+        printStrWithoutSpaceInStart(file, widthOfAllColumn[4 + index], Struct.publishers[index], Struct.countSimbolsInStr[index]);
     }
     //print rating
     fputc('|',file);
@@ -645,6 +662,22 @@ void printStr(FILE* file, int widthColumn, char* str, int lenStr)
         fputc(' ', file);
     }
     printSpase(file ,countALLSpace%2==0?countALLSpace/2:countALLSpace/2+1);
+}
+/*********************************************/
+void printStrWithoutSpaceInStart(FILE* file, int widthColumn, char* str, int lenStr)
+{
+    int countALLSpace = widthColumn-lenStr;
+    fputc(' ', file);
+    countALLSpace -= 1;
+    if(str[0] != '\0')
+    {
+        fprintf(file, "%s", str);
+    }
+    else
+    {
+        fputc(' ', file);
+    }
+    printSpase(file ,countALLSpace);
 }
 /*********************************************/
 void printNumber(FILE* file, int number, int width)
@@ -799,19 +832,24 @@ int* searchIndexesOfBooksByRating(book* arrOfBooks, int countBooks, int rating)
     return indexesOfFoundBooks; 
 }
 /*********************************************/
-int clear_input_buffer(void) {
+int clearInputBuffer(void) {
     int ch;
-    while (((ch = getchar()) != EOF) && (ch != '\n')) /* void */;
+    while (((ch = getchar()) != EOF) && (ch != '\n'));
     return ch;
 }
 /*********************************************/
 int main(int argc, char** argv)
 {
+    if ( ! checkInputData(argc, argv) )
+    {
+        printf("bad input data. Need 1 - json file, 2 - file for writing the table\n");
+        return 1;
+    }
     int countBooks = 0;
     book* arrOfBooks;
     int exit = 0;
     int* widthOfAllColumn;
-    char* nameFile = (char*)malloc(30*sizeof(char));
+    char* nameFile = (char*)malloc(257*sizeof(char));
     countBooks = 0;
     nameFile = argv[1];
     arrOfBooks = createArrOfBooksFromJSON(nameFile, &countBooks);
@@ -839,7 +877,16 @@ int main(int argc, char** argv)
         lenStr[index] = strLen(headlines[index]);
     }
     widthOfAllColumn = searchWidthOfAllColumn(arrOfBooks, countBooks, lenStr);
-    nameFile = argv[2];
+    if(argc == 3)
+    {
+       nameFile = argv[2]; 
+    }
+    else
+    {
+        printf("Input name file for writing table: ");
+        clearInputBuffer();
+        gets(nameFile);
+    } 
     printTableInFile(nameFile, arrOfBooks, countBooks, headlines, lenStr, widthOfAllColumn);
     while(!exit)
     {
@@ -864,7 +911,7 @@ int main(int argc, char** argv)
                 case 1: 
                     printf("Input title: \n");
                     char title[60];
-                    clear_input_buffer();
+                    clearInputBuffer();
                     gets(title);
                     printf("Input: %s", title);
                     indexesOfFoundBooks =  searchIndexesOfBooksByTitle(arrOfBooks, countBooks, title);
@@ -881,7 +928,7 @@ int main(int argc, char** argv)
                 case 2:
                     printf("Input author: ");
                     char author[60];
-                    clear_input_buffer();
+                    clearInputBuffer();
                     gets(author);
                     printf("Input: %s", author);
                     indexesOfFoundBooks =  searchIndexesOfBooksByAuthor(arrOfBooks, countBooks, author);
@@ -914,7 +961,7 @@ int main(int argc, char** argv)
                 case 4:
                     printf("Input publisher: ");
                     char publisher[60];
-                    clear_input_buffer();
+                    clearInputBuffer();
                     gets(publisher);
                     printf("Input: %s", title);
                     putc('\n', stdout);
@@ -952,7 +999,7 @@ int main(int argc, char** argv)
         else if(choose == 2)
         {
             printf("Table:\n");
-            FILE* table = fopen(argv[2], "r");
+            FILE* table = fopen(nameFile, "r");
             char charInTable;
             while((charInTable = fgetc(table)) != EOF)
             {
