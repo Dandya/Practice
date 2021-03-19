@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <malloc.h>
 #include <stdlib.h>
+#include "/home/alex/gtest/include/gtest/gtest.h" //our path gtest
 /**********************************************/
 typedef struct
 {
@@ -75,7 +75,7 @@ book* createArrOfBooksFromJSON(char* nameFileJSON, int* countBooks)
     
     if (json == NULL)
     {
-        printf("error of open file .json");
+        printf("error of open file .json\n");
         exit(2);
     }
     
@@ -102,8 +102,8 @@ book* beginReadJSON(FILE* json, book* arrOfBooks, int* countBooks)
     }
     else if(result == '{')
     {
-        dictJSON(json, arrOfBooks, 0);
-        *countBooks++;
+        dictJSON(json, arrOfBooks, countBooks);
+        *countBooks += 1;
     }
     else
     {
@@ -850,7 +850,6 @@ int main(int argc, char** argv)
     int exit = 0;
     int* widthOfAllColumn;
     char* nameFile = (char*)malloc(257*sizeof(char));
-    countBooks = 0;
     nameFile = argv[1];
     arrOfBooks = createArrOfBooksFromJSON(nameFile, &countBooks);
     printf("Sort books by rating(1) or years(2) of relise or no(3)?\n");
@@ -864,11 +863,11 @@ int main(int argc, char** argv)
     }
     if(choose == 1)
     {
-        sortArrOfBooksYear(arrOfBooks, countBooks);
+        sortArrOfBooksRating(arrOfBooks, countBooks);
     }
     else if(choose == 2)
     {
-        sortArrOfBooksRating(arrOfBooks, countBooks);
+        sortArrOfBooksYear(arrOfBooks, countBooks);
     }
     char* headlines [10] = {"№","Название","Автор","Год выпуска","Издатель 1", "Издатель 2", "Издатель 3", "Издатель 4", "Издатель 5", "Рейтинг"};
     int lenStr[10];
@@ -909,6 +908,7 @@ int main(int argc, char** argv)
             switch(choose)
             {
                 case 1: 
+                    {
                     printf("Input title: \n");
                     char title[60];
                     clearInputBuffer();
@@ -924,8 +924,10 @@ int main(int argc, char** argv)
                         i++;
                     }
                     free(indexesOfFoundBooks);
+                    }
                     break;
                 case 2:
+                    {
                     printf("Input author: ");
                     char author[60];
                     clearInputBuffer();
@@ -941,8 +943,10 @@ int main(int argc, char** argv)
                         i++;
                     }
                     free(indexesOfFoundBooks);
+                    }
                     break;
                 case 3:
+                    {
                     printf("Input year: ");
                     int year = 0;
                     fflush(stdin);
@@ -957,13 +961,15 @@ int main(int argc, char** argv)
                         i++;
                     }
                     free(indexesOfFoundBooks);
+                    }
                     break;
                 case 4:
+                    {
                     printf("Input publisher: ");
                     char publisher[60];
                     clearInputBuffer();
                     gets(publisher);
-                    printf("Input: %s", title);
+                    printf("Input: %s", publisher);
                     putc('\n', stdout);
                     indexesOfFoundBooks =  searchIndexesOfBooksByPublisher(arrOfBooks, countBooks, publisher);
                     i = 0;
@@ -974,8 +980,10 @@ int main(int argc, char** argv)
                         i++;
                     }
                     free(indexesOfFoundBooks);
+                    }
                     break;
                 case 5:
+                    {
                     printf("Input rating: ");
                     int rating = 0;
                     fflush(stdin);
@@ -990,10 +998,15 @@ int main(int argc, char** argv)
                         i++;
                     }
                     free(indexesOfFoundBooks);
+                    }
                     break;
                 default:
+                    {
                     printf("bad choose\n");
                     continue;
+                    }
+                    break;
+                
             }
         }
         else if(choose == 2)
@@ -1008,7 +1021,7 @@ int main(int argc, char** argv)
         }
         else if(choose == 3)
         {
-            return 1;
+            break;
         }
         else
         {
@@ -1016,7 +1029,49 @@ int main(int argc, char** argv)
             continue; 
         }
     }
-
-    return 0;
+    testing::InitGoogleTest(&argc,argv);
+    return RUN_ALL_TESTS();
+    //return 0;
 }
 /**********************************************/
+TEST(checkProgramm, checkStruct)
+{
+    book* constStruct;
+    int countBook = 0;
+    constStruct = createArrOfBooksFromJSON("test.json", &countBook);
+    ASSERT_EQ(1 ,countBook);
+    ASSERT_STREQ("Мёртвые души",constStruct->nameBook);
+    ASSERT_EQ(12, constStruct->countSimbolsInNameBook);
+    ASSERT_STREQ("Гоголь", constStruct->author);
+    ASSERT_EQ(6 , constStruct->countSimbolsInAuthor);
+    ASSERT_EQ(1847, constStruct->yearOfRelise);
+    ASSERT_STREQ("ooo", constStruct->publishers[0]);
+    ASSERT_EQ(3, constStruct->countSimbolsInStr[0]);
+    ASSERT_EQ(1947, constStruct->rating);
+}
+TEST(checkProgramm, checkArrStructs)
+{
+    book* constStruct;
+    int countBook = 0;
+    constStruct = createArrOfBooksFromJSON("testList.json", &countBook);
+    ASSERT_EQ(2 ,countBook);
+    ASSERT_STREQ("Мёртвые души" ,constStruct[0].nameBook);
+    ASSERT_EQ(12, constStruct[0].countSimbolsInNameBook);
+    ASSERT_STREQ("Гоголь", constStruct[0].author);
+    ASSERT_EQ(6 , constStruct[0].countSimbolsInAuthor);
+    ASSERT_EQ(1847, constStruct[0].yearOfRelise);
+    ASSERT_STREQ("ooo", constStruct[0].publishers[0]);
+    ASSERT_EQ(3, constStruct[0].countSimbolsInStr[0]);
+    ASSERT_EQ(1947, constStruct[0].rating);
+    //
+    ASSERT_STREQ("Крёстный отец" ,constStruct[1].nameBook);
+    ASSERT_EQ(13, constStruct[1].countSimbolsInNameBook);
+    ASSERT_STREQ("Марио Фьюза", constStruct[1].author);
+    ASSERT_EQ(11, constStruct[1].countSimbolsInAuthor);
+    ASSERT_EQ(1356, constStruct[1].yearOfRelise);
+    ASSERT_STREQ("Классика", constStruct[1].publishers[0]);
+    ASSERT_EQ(8, constStruct[1].countSimbolsInStr[0]);
+    ASSERT_STREQ("Fantastic", constStruct[1].publishers[1]);
+    ASSERT_EQ(9, constStruct[1].countSimbolsInStr[1]);
+    ASSERT_EQ(7, constStruct[1].rating);
+}

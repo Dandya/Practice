@@ -1,0 +1,16 @@
+[
+    {
+		"Title": "Мёртвые души",
+      "Author": "Гоголь",
+		"YearOfRelease": 1847,
+		"Rating": 1947,
+      "Publishers": "ooo"
+	},
+   {
+      "Title": "Крёстный отец",
+      "Rating": 7,
+      "Author": "Марио Фьюза",
+		"Publishers": ["Классика", "Fantastic"],
+      "YearOfRelease": 1356
+   }
+]
