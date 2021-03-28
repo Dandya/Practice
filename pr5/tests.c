@@ -70,6 +70,14 @@ TEST(NumAndArrInsideInBits, Int)
     EXPECT_STREQ("10110111000000000000000000000000", number);
     free(number);
     //-----------
+    a = 0;
+    number = seeNumOrArrInsideInBits(&a, sizeof(a), MODE_TYPE);
+    EXPECT_STREQ("00000000000000000000000000000000", number);
+    free(number);
+    number = seeNumOrArrInsideInBits(&a, sizeof(a), MODE_MEMORY);
+    EXPECT_STREQ("00000000000000000000000000000000", number);
+    free(number);
+    //-----------
     long long b;
     //-----------
     b = getLongLongIntMax();
@@ -94,6 +102,14 @@ TEST(NumAndArrInsideInBits, Int)
     free(number);
     number = seeNumOrArrInsideInBits(&b, sizeof(b), MODE_MEMORY);
     EXPECT_STREQ("1001100011010110110111101100010010000000000000000000000000000000", number);
+    free(number);
+    //-----------
+    b = 0;
+    number = seeNumOrArrInsideInBits(&b, sizeof(b), MODE_TYPE);
+    EXPECT_STREQ("0000000000000000000000000000000000000000000000000000000000000000", number);
+    free(number);
+    number = seeNumOrArrInsideInBits(&b, sizeof(b), MODE_MEMORY);
+    EXPECT_STREQ("0000000000000000000000000000000000000000000000000000000000000000", number);
     free(number);
 }
 
@@ -121,6 +137,18 @@ TEST(NumOrArrInsideInBytes, numberInBytes)
     ptr = seeNumOrArrInsideInBytes(&a, sizeof(a));
     EXPECT_STREQ(ptr, "\"A!,");
     free(ptr);
+}
+
+TEST(NumAndArrInside, Errors)
+{
+    char* ptr = seeNumOrArrInsideInBits(NULL, 2, MODE_MEMORY);
+    ASSERT_TRUE(ptr == NULL);
+    int a = 0;
+    ptr = seeNumOrArrInsideInBits(&a, sizeof(a), 2);
+    ASSERT_TRUE(ptr == NULL);
+
+    ptr = seeNumOrArrInsideInBytes(NULL, 2);
+    ASSERT_TRUE(ptr == NULL);
 }
 
 int main(int argc, char **argv)

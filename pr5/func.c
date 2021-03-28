@@ -9,121 +9,125 @@
 /************************char*****************************/
 char getCharMax()
 {
-	return (char)CHAR_MAX;
+	return CHAR_MAX;
 }
 /*********************************************************/
 char getCharMin()
 {
-	return (char)CHAR_MIN;
+	return CHAR_MIN;
 }
 /*********************************************************/
 signed char getSignedCharMax()
 {
-	return (signed char)SCHAR_MAX;
+	return SCHAR_MAX;
 }
 /*********************************************************/
 signed char getSignedCharMin()
 {
-	return (signed char)SCHAR_MIN;
+	return SCHAR_MIN;
 }
 /*********************************************************/
 unsigned char getUnsignedCharMax()
 {
-	return (unsigned char)UCHAR_MAX;
+	return UCHAR_MAX;
 }
 /*************************int*****************************/
 short getShortIntMax()
 {
-	return (short)SHRT_MAX;
+	return SHRT_MAX;
 }
 /*********************************************************/
 short getShortIntMin()
 {
-	return (short)SHRT_MIN;
+	return SHRT_MIN;
 }
 /*********************************************************/
 unsigned short getUnsignedShortIntMax()
 {
-	return (unsigned short)USHRT_MAX;
+	return USHRT_MAX;
 }
 /*********************************************************/
 int getIntMax()
 {
-	return (int)INT_MAX;
+	return INT_MAX;
 }
 /*********************************************************/
 int getIntMin()
 {
-	return (int)INT_MIN;
+	return INT_MIN;
 }
 /*********************************************************/
 unsigned int getUnsignedIntMax()
 {
-	return (unsigned int)UINT_MAX;
+	return UINT_MAX;
 }
 /*********************************************************/
 long getLongIntMax()
 {
-	return (long)LONG_MAX;
+	return LONG_MAX;
 }
 /*********************************************************/
 long getLongIntMin()
 {
-	return (long)LONG_MIN;
+	return LONG_MIN;
 }
 /*********************************************************/
 unsigned long getUnsignedLongIntMax()
 {
-	return (unsigned long)ULONG_MAX;
+	return ULONG_MAX;
 }
 /*********************************************************/
 long long getLongLongIntMax()
 {
-	return (long long)LLONG_MAX;
+	return LLONG_MAX;
 }
 /*********************************************************/
 long long getLongLongIntMin()
 {
-	return (long long)LLONG_MIN;
+	return LLONG_MIN;
 }
 /*********************************************************/
 unsigned long long getUnsignedLongLongIntMax()
 {
-	return (unsigned long long )ULLONG_MAX;
+	return ULLONG_MAX;
 }
 /************************float****************************/
 float getFloatMax()
 {
-	return (float)FLT_MAX;
+	return FLT_MAX;
 }
 /*********************************************************/
 float getFloatMin()
 {
-	return (float)FLT_MIN;
+	return FLT_MIN;
 }
 /*********************************************************/
 double getDoubleMax()
 {
-	return  (double)DBL_MAX;
+	return DBL_MAX;
 }
 /*********************************************************/
 double getDoubleMin()
 {
-	return  (double)DBL_MIN;
+	return DBL_MIN;
 }
 /*********************************************************/
 long double getLongDoubleMax()
 {
-	return  (long double)LDBL_MAX;
+	return LDBL_MAX;
 }
 /*********************************************************/
 long double getLongDoubleMin()
 {
-	return  (long double)LDBL_MIN;
+	return LDBL_MIN;
 }
 /****Function to return bit representation of a number****/
-char* seeNumOrArrInsideInBits(void* ptrOnNumberOrArr, int sizeInBytes, int mode) //MODE_TYPE = 1 MODE_MEMORY = 0 
+char* seeNumOrArrInsideInBits(void* ptrOnNumberOrArr, int sizeInBytes, int mode) 
 {
+    if(ptrOnNumberOrArr == NULL)
+    {
+        return NULL;
+    }
 	int sizeInBits = sizeInBytes*CHAR_BIT;
 	char* insideView = (char*)malloc((sizeInBits+1)*sizeof(char));
     if(insideView == NULL)
@@ -156,6 +160,7 @@ char* seeNumOrArrInsideInBits(void* ptrOnNumberOrArr, int sizeInBytes, int mode)
     }
     else
     {
+        free(insideView);
         return NULL;
     }
     insideView[sizeInBits] = '\0';
@@ -164,6 +169,10 @@ char* seeNumOrArrInsideInBits(void* ptrOnNumberOrArr, int sizeInBytes, int mode)
 /****Function to return byte representation of a number****/
 char* seeNumOrArrInsideInBytes(void* ptrOnNumberOrArr, int sizeInBytes)
 {
+    if(ptrOnNumberOrArr == NULL)
+    {
+        return NULL;
+    }
     char* insideView = (char*)malloc((sizeInBytes+1)*sizeof(char));
     if(insideView == NULL)
     {
