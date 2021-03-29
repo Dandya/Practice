@@ -124,7 +124,7 @@ long double getLongDoubleMin()
 /****Function to return bit representation of a number****/
 char* seeNumOrArrInsideInBits(void* ptrOnNumberOrArr, int sizeInBytes, int mode) 
 {
-    if(ptrOnNumberOrArr == NULL)
+    if(ptrOnNumberOrArr == NULL || sizeInBytes < 0)
     {
         return NULL;
     }
@@ -169,11 +169,11 @@ char* seeNumOrArrInsideInBits(void* ptrOnNumberOrArr, int sizeInBytes, int mode)
 /****Function to return byte representation of a number****/
 char* seeNumOrArrInsideInBytes(void* ptrOnNumberOrArr, int sizeInBytes)
 {
-    if(ptrOnNumberOrArr == NULL)
+    if(ptrOnNumberOrArr == NULL || sizeInBytes < 0)
     {
         return NULL;
     }
-    char* insideView = (char*)malloc((sizeInBytes+1)*sizeof(char));
+    char* insideView = (char*)malloc((sizeInBytes)*sizeof(char));
     if(insideView == NULL)
     {
         return NULL;
@@ -183,7 +183,6 @@ char* seeNumOrArrInsideInBytes(void* ptrOnNumberOrArr, int sizeInBytes)
     {
         insideView[iteration] = *(ptr + iteration);
     }
-    insideView[sizeInBytes] = '\0';
     return insideView;
 }
 /*********************************************************/

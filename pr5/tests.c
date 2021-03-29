@@ -146,8 +146,12 @@ TEST(NumAndArrInside, Errors)
     int a = 0;
     ptr = seeNumOrArrInsideInBits(&a, sizeof(a), 2);
     ASSERT_TRUE(ptr == NULL);
+    ptr = seeNumOrArrInsideInBits(&a, -1, MODE_TYPE);
+    ASSERT_TRUE(ptr == NULL);
 
     ptr = seeNumOrArrInsideInBytes(NULL, 2);
+    ASSERT_TRUE(ptr == NULL);
+    ptr = seeNumOrArrInsideInBytes(&a, -1);
     ASSERT_TRUE(ptr == NULL);
 }
 
