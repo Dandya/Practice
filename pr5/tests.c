@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "func.c"
 #include "/home/alex/gtest/include/gtest/gtest.h"
 
