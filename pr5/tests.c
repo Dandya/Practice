@@ -135,7 +135,10 @@ TEST(NumOrArrInsideInBytes, numberInBytes)
     int a = 740376866;
     char* ptr; 
     ptr = seeNumOrArrInsideInBytes(&a, sizeof(a));
-    EXPECT_STREQ(ptr, "\"A!,");
+    EXPECT_EQ(ptr[0], '\"');
+    EXPECT_EQ(ptr[1], 'A');
+    EXPECT_EQ(ptr[2], '!');
+    EXPECT_EQ(ptr[3], ',');
     free(ptr);
 }
 
