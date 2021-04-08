@@ -131,13 +131,13 @@ TEST(NumAndArrInsideInBits, Arr)
 
 TEST(NumOrArrInsideInBytes, numberInBytes)
 {
-    int a = 740376866;
+    int a = 0x248;
     char* ptr; 
     ptr = seeNumOrArrInsideInBytes(&a, sizeof(a));
-    EXPECT_EQ(ptr[0], '\"');
-    EXPECT_EQ(ptr[1], 'A');
-    EXPECT_EQ(ptr[2], '!');
-    EXPECT_EQ(ptr[3], ',');
+    EXPECT_EQ(ptr[0], 0x48);
+    EXPECT_EQ(ptr[1], 0x02);
+    EXPECT_EQ(ptr[2], 0x00);
+    EXPECT_EQ(ptr[3], 0x00);
     free(ptr);
 }
 

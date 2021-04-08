@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
 /***************************************/
-int searchIndexPoint(char* numberInStr);
+int searchCountWholeDigit(char* numberInStr);
 double conversionFromFourteenToTenSys(char* numberInStr,int degree);
 double Pow(double number, int degree);
 /***************************************/
@@ -13,10 +13,10 @@ int main()
     fgets(numberInFourteenSys, 20, stdin);
 //end input number
 
-    int indexPoint = searchIndexPoint(numberInFourteenSys); //search index point
+    int countWholeDigit = searchCountWholeDigit(numberInFourteenSys); //search index point
 
 //conversion
-    int degreeMax = indexPoint-1;
+    int degreeMax = countWholeDigit-1;
     double numberInTenSys = conversionFromFourteenToTenSys(numberInFourteenSys, degreeMax);
     if(numberInTenSys==-1.)
         return -1;
@@ -26,7 +26,7 @@ int main()
     return 0;
 } 
 /***************************************/
-int searchIndexPoint(char* numberInStr)
+int searchCountWholeDigit(char* numberInStr)
 {
 /*
 	 Функция ищет индекс точки в строке, если же 
