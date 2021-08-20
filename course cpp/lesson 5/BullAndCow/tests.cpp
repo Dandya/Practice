@@ -59,16 +59,7 @@ TEST(Main, RandomWordsRU)
     std::cout << word << std::endl;
 }
 
-/*TEST(Main, PROSTO)
-{
-    std::u16string word;
-    std::cout << "Input word: ";
-    std::cin >> word;
-    for(int index = 0; index < word.length(); index++)
-    {
-        std::cout << word[index] << std::endl;
-    }
-}*/
+
 
 int main(int argc, char **argv)
 {

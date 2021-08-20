@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <random> // для std::random_device и std::mt19937
-
+#include <random> 
 #ifndef BULL_AND_COW_H
 #define BULL_AND_COW_H
 //*********Work with words************
@@ -17,6 +16,7 @@ const std::string inputWord()
     return input;
 }
 //----------------------------------------------------------------
+#define DIGITS 2
 #define LANGUAGE_RU 1
 #define LANGUAGE_EN 0
 #define BULL 1
@@ -121,7 +121,7 @@ bool isTrueDifficultyLevel(int difficultyLevel, int lengthWord, int language)
             case HARD: if(lengthWord <= 9 && lengthWord >= 8) return true; break;
         }
     }
-    else // LANGUAGE_RU ! Russian symbol has size of two bite
+    else if (language == LANGUAGE_RU) //  ! Russian symbol has size of two bite
     {
         switch(difficultyLevel)
         {
@@ -130,11 +130,25 @@ bool isTrueDifficultyLevel(int difficultyLevel, int lengthWord, int language)
             case HARD: if(lengthWord <= 18 && lengthWord >= 16) return true; break;
         }
     }
+    else // DIGITS
+    {
+        switch(difficultyLevel)
+        {
+            case EASY: if(lengthWord <= 5 && lengthWord >= 4) return true; break;
+            case NORMAL: if(lengthWord <= 7 && lengthWord >= 5) return true; break;
+            case HARD: if(lengthWord <= 9 && lengthWord >= 7) return true; break;
+        }
+    }
     return false;
 }
 //-------------------------------------------------------------
 #define DICTIONARY_MAX_RU 67774
 #define DICTIONARY_MAX_EN 1775
+/**
+ * randomWord
+ * * Fuction return random word from dictionary depending on the difficulty
+ * * level and language
+ */
 std::string randomWord(int difficultyLevel, int language)
 {
     /*std::random_device rd; // need for random number 
@@ -163,7 +177,45 @@ std::string randomWord(int difficultyLevel, int language)
         return word;
     }
     return randomWord(difficultyLevel,language);
-    
+}
+//**************DIGITS*********************
+/**
+ * randomDigits
+ * * Function returns a random digits in string format
+ */
+std::string randomDigits(int difficultyLevel)
+{
+    srand(time(0));
+    std::string numStr;
+    do
+    {
+        numStr = std::to_string(rand());
+    } while (!isTrueDifficultyLevel(difficultyLevel, numStr.length(), DIGITS));
+    return numStr;
+}
+//*************SIMPLE_GAME*****************
+/**
+ * simpleGame
+ * * Function defines simple game by user
+ * @param mode maybe will be LANGUAGE_RU, LANGUAGE_EN, DIGITS
+ */
+int simpleGame(int mode, int difficultyLevel)
+{
+    switch(mode)
+    {
+        case DIGITS:
+        {
+            
+        }
+        case LANGUAGE_EN: 
+        {
+
+        }
+        case LANGUAGE_RU: 
+        {
+            
+        }
+    }
 }
 //*****************************************
 #endif 
