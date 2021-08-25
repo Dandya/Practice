@@ -205,7 +205,7 @@ int simpleGame(int mode, int difficultyLevel)
     {
         case DIGITS:
         {
-            
+            std::cout << "s"
         }
         case LANGUAGE_EN: 
         {
