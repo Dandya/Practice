@@ -1,6 +1,5 @@
-#include "fuctions.h"
-#include "/home/alex/gtest/include/gtest/gtest.h"
-
+#include "/home/aleksandr/Gtest/include/gtest/gtest.h"
+#include "functions.h"
 TEST(Main, SearchBullOrCowRU)
 {
     std::string word = "Привет";
@@ -19,22 +18,22 @@ TEST(Main, SearchBullOrCowEN)
     EXPECT_EQ(searchBullOrCowEN('B', 3, word), -1);
 }
 
-TEST(Main, CompareWordsRU)
+TEST(Main, CompareStrRU)
 {
     std::string word1 = "Привет";
     std::string word2 =  "Пилоты";
     int countBulls{0}, countCows{0};
-    compareWords(word1, word2, &countBulls, &countCows, LANGUAGE_RU);
+    compareStr(word1, word2, &countBulls, &countCows, LANGUAGE_RU);
     EXPECT_EQ(countCows, 2);
     EXPECT_EQ(countBulls, 1);
 }
 
-TEST(Main, CompareWordsEN)
+TEST(Main, CompareStrEN)
 {
     std::string word1 = "Hello";
     std::string word2 = "Henry";
     int countBulls{0}, countCows{0};
-    compareWords(word1, word2, &countBulls, &countCows, LANGUAGE_EN);
+    compareStr(word1, word2, &countBulls, &countCows, LANGUAGE_EN);
     EXPECT_EQ(countCows, 0);
     EXPECT_EQ(countBulls, 2);
 }

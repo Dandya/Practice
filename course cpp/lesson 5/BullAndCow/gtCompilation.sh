@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-PathToInclude=/home/alex/gtest/include #Твой путь до папки include
-PathToLib=/home/alex/gtest/build/lib #Твой путь до папки lib
+PathToInclude=/home/aleksandr/Gtest/include #Твой путь до папки include
+PathToLib=/home/aleksandr/Gtest/build/lib #Твой путь до папки lib
 
 Parameter1="$1"
 Parameter2="$2"
