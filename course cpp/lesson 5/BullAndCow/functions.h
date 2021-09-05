@@ -4,7 +4,6 @@
 #include <time.h>
 #ifndef BULL_AND_COW_H
 #define BULL_AND_COW_H
-// TODO Функция проверки на то, что все символы различны!
 //*********Work with string************
 /**
  * clearInputBuffer
@@ -98,9 +97,25 @@ bool isTrueDifficultyLevel(int difficultyLevel, int lengthWord)
     {
         case EASY: if(lengthWord <= 5 && lengthWord >= 4) return true; break;
         case NORMAL: if(lengthWord <= 7 && lengthWord >= 5) return true; break;
-        case HARD: if(lengthWord <= 9 && lengthWord >= 7) return true; break;
+        case HARD: if(lengthWord <= 9 && lengthWord >= 5) return true; break;
     }
     return false;
+}
+//-------------------------------------------------------------
+/**
+ * compareSymbols
+ * @param index = index of symbol in numStr + 1
+ */
+bool compareSymbols(char symbol, int index, std::string numStr)
+{
+    for(;index < numStr.length(); index++)
+    {
+        if(symbol == numStr[index])
+        {
+            return false;
+        }
+    }
+    return true;
 }
 //---------------------------------------------------------------
 /**
@@ -109,26 +124,20 @@ bool isTrueDifficultyLevel(int difficultyLevel, int lengthWord)
  */
 bool isTrueVariousSimbols(std::string numStr)
 {
-    char masSymbols[numStr.length()] {0};
-    // run for all simbols in string and write unical simbol to massive
-    for (int i1 {0}, i2 {1}; i1 < numStr.length(); i1++)
+    //char masSymbols[numStr.length()] {0};
+    // * run for all simbols in string and write unical simbol to massive
+    for (int i {0}; i < numStr.length(); i++)
     {
-        if(numStr[i1] != numStr[i2])
+        if(compareSymbols(numStr[i], i+1, numStr))
         {
-            i2++;
-            if(i2 == numStr.length())
-            {
-                i2=i1+2;
-                continue;
-            }
-            i1--;
+            continue;
         }
         else
         {
             return false;
         }
-        return true;
     }
+    return true;
 }
 //**************DIGITS*********************
 /**
@@ -141,7 +150,7 @@ std::string randomDigits(int difficultyLevel)
     std::string numStr;
     do
     {
-        numStr = std::to_string(rand());
+        numStr = std::to_string(rand()%1000000000);
     } while (!isTrueDifficultyLevel(difficultyLevel, numStr.length()) || !isTrueVariousSimbols(numStr));
     return numStr;
 }
@@ -151,21 +160,23 @@ std::string randomDigits(int difficultyLevel)
  * * Function defines simple game by user
  * @param mode maybe will be LANGUAGE_RU, LANGUAGE_EN, DIGITS
  */
-int simpleGame(int mode, int difficultyLevel)
+int simpleGame(int difficultyLevel)
 {
-    
     std::string numStr = randomDigits(difficultyLevel);
-    std::cout << numStr << std::endl; // !
     int countBulls {0}, countCows {0};
     std::string answer;
     int round {0};
     //process of game
-    std::cout << "Length: " << numStr.length()-1 << std::endl;
+    std::cout << "Length: " << numStr.length() << std::endl;
     while(numStr.length() != countBulls)
     {
         round++;
         std::cout << "Round " << round << std::endl;
         answer = inputStr();
+        if(answer == "exit")
+        {
+            return 2;
+        }
         compareStr(answer, numStr, &countBulls, &countCows);
         std::cout << "Bulls: " << countBulls << std::endl; 
         std::cout << "Cows: " << countCows << std::endl;

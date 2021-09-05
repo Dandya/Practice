@@ -1,5 +1,6 @@
-#include "/home/aleksandr/Gtest/include/gtest/gtest.h"
+#include "/home/aleksandr/gtest/include/gtest/gtest.h"
 #include "functions.h"
+/*
 TEST(Main, SearchBullOrCowRU)
 {
     std::string word = "Привет";
@@ -56,6 +57,42 @@ TEST(Main, RandomWordsRU)
     std::cout << word << std::endl;
     word = randomWord(HARD, LANGUAGE_RU);
     std::cout << word << std::endl;
+}*/
+TEST(Main, isTrue)
+{
+    EXPECT_EQ(true, isTrueDifficultyLevel(EASY, 4));
+    EXPECT_EQ(false, isTrueDifficultyLevel(EASY, 6));
+    EXPECT_EQ(true, isTrueVariousSimbols("1234"));
+    EXPECT_EQ(false, isTrueVariousSimbols("1224"));
+    EXPECT_EQ(false, isTrueVariousSimbols("1214"));
+    EXPECT_EQ(false, isTrueVariousSimbols("1212"));
+    EXPECT_EQ(false, isTrueVariousSimbols("1233"));
+
+}
+
+TEST(Main, RandomDigits)
+{
+    std::cout << randomDigits(EASY) << std::endl;
+    std::cout << randomDigits(NORMAL) << std::endl;
+    std::cout << randomDigits(HARD) << std::endl;
+}
+
+TEST(Main, SearchBullOrCow)
+{
+    std::string num1 = "1234";
+    EXPECT_EQ(searchBullOrCow('1', 0, num1), BULL);
+    EXPECT_EQ(searchBullOrCow('4', 3, num1), BULL);
+    EXPECT_EQ(searchBullOrCow('2', 2, num1), COW);
+}
+
+TEST(Main, CompareStr)
+{
+    std::string word1 = "1234";
+    std::string word2 = "1325";
+    int countBulls{0}, countCows{0};
+    compareStr(word1, word2, &countBulls, &countCows);
+    EXPECT_EQ(countCows, 2);
+    EXPECT_EQ(countBulls, 1);
 }
 
 
