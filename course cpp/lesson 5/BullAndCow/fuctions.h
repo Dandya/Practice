@@ -219,3 +219,4 @@ int simpleGame(int mode, int difficultyLevel)
 }
 //*****************************************
 #endif 
+//Привет
