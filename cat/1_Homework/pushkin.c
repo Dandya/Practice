@@ -1,10 +1,8 @@
 #include <stdio.h>
-#include <string.h>
 #include <malloc.h>
 //----------------------------------------------------------------
 int strEQ(char* strFirst,char * strSecond)
 {
-    //printf("strEQ: %s, %s",strFirst, strSecond);
     int index = 0;
     while(strFirst[index] == strSecond[index])
     {
