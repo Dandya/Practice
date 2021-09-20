@@ -12,7 +12,7 @@ int strEQ(char* strFirst,char * strSecond)
         }
         index++;
     }
-    if (strFirst[index] == '\n' && strSecond[index] == '\0') // it is penultimate line
+    if (strFirst[index] == '\n' && strSecond[index] == '\0') // It is penultimate line
     {
         return 1;
     }
