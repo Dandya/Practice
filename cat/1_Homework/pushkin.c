@@ -289,6 +289,6 @@ char* pushkin(char* text)
             return concatenationStr(text, lines[isPenultimateLine ? i+2 : i+1], index, StrLen(lines[isPenultimateLine ? i+2 : i+1])); 
         }
     }
-    printf("Строка: %sНе найдена в тексте!",text+indexLastLF+1 )
+    printf("Строка: %sНе найдена в тексте!",text+indexLastLF+1 );
     return NULL;
 }
