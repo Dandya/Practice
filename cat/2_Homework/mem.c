@@ -23,6 +23,8 @@ static void __attribute__((destructor)) freeMem(void)
     char* cmdline = (char*)malloc(257);
     fgets(cmdline, 257, proc);
     close(proc);
+    int indexEndNameProgramm = 0;
+    while()
     
     
 }
