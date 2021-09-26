@@ -35,7 +35,11 @@ static void __attribute__((destructor)) freeMem(void)
     command = concatinationStr(command, "mem.log", 8+indexEndNameProgramm, 8);
     system(command);
     free(command);
-    FILE* mem_log = fopen()
+    FILE* mem_log = fopen("./mem.log", "r");
+    if(mem_log == NULL)
+    {
+        printf()
+    }
     
     
 }
