@@ -28,7 +28,9 @@ static void __attribute__((destructor)) freeMem(void)
     {
         indexEndNameProgramm++;
     }
-    
+    //concstination
+    //comand shells
+    FILE* mem_log = fopen()
     
     
 }
