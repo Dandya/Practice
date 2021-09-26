@@ -28,7 +28,14 @@ static void __attribute__((destructor)) freeMem(void)
     {
         indexEndNameProgramm++;
     }
-    char* command[] = 
+    char* command = concatinationStr("MALLOC_TRACE=mem.log ", cmdline, x, indexEndNameProgramm);
+    system(command);
+    free(command);
+    command = concatinationStr("mtrace ", cmdline, 8, indexEndNameProgramm);
+    
+    system(command);
+    free(command);
+    
     //comand shells
     FILE* mem_log = fopen()
     
