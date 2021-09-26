@@ -38,8 +38,9 @@ static void __attribute__((destructor)) freeMem(void)
     FILE* mem_log = fopen("./mem.log", "r");
     if(mem_log == NULL)
     {
-        printf()
+        printf("mem_log");
     }
+    
     
     
 }
