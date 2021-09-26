@@ -32,11 +32,9 @@ static void __attribute__((destructor)) freeMem(void)
     system(command);
     free(command);
     command = concatinationStr("mtrace ", cmdline, 8, indexEndNameProgramm);
-    
+    command = concatinationStr(command, "mem.log", 8+indexEndNameProgramm, 8);
     system(command);
     free(command);
-    
-    //comand shells
     FILE* mem_log = fopen()
     
     
