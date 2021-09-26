@@ -40,7 +40,7 @@ static void __attribute__((destructor)) freeMem(void)
     {
         printf("mem_log");
     }
-    
+    while
     
     
 }
