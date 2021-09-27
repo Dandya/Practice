@@ -2,6 +2,7 @@
 #include <mcheck.h>
 #include <malloc.h>
 
+static char* cmdline;
 
 void* new(size_t size)
 {
@@ -11,24 +12,24 @@ void* new(size_t size)
 static void __attribute__((constructor)) constructor(void)
 {
     mtrace();
-}
-
-static void __attribute__((destructor)) freeMem(void)
-{
     FILE* proc = fopen("/proc/self/cmdline", "r");        
     if(proc == NULL)
     {
         printf("proc");
     }
-    char* cmdline = (char*)malloc(257);
+    cmdline = (char*)malloc(257);
     fgets(cmdline, 257, proc);
     close(proc);
+}
+
+static void __attribute__((destructor)) freeMem(void)
+{
     int indexEndNameProgramm = 0;
-    while(indexEndNameProgramm =! ' ')
+    while(cmdline[indexEndNameProgramm] =! ' ')
     {
         indexEndNameProgramm++;
     }
-    char* command = concatinationStr("MALLOC_TRACE=mem.log ", cmdline, x, indexEndNameProgramm);
+    char* command = concatinationStr("MALLOC_TRACE=mem.log ", cmdline, 22, indexEndNameProgramm); // ! check
     system(command);
     free(command);
     command = concatinationStr("mtrace ", cmdline, 8, indexEndNameProgramm);
@@ -40,7 +41,7 @@ static void __attribute__((destructor)) freeMem(void)
     {
         printf("mem_log");
     }
-    while
+    while()
     
     
 }
