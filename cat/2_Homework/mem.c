@@ -50,24 +50,24 @@ static void __attribute__((constructor)) constructor(void)
     cmdline = (char*)malloc(257);
     fgets(cmdline, 257, proc);
     fclose(proc);
-    printf("%s\n", cmdline);
+    //printf("%s\n", cmdline);
 }
 
 static void __attribute__((destructor)) freeMem(void)
 {
-    /*int indexEndNameProgramm = 0;
-    while(cmdline[indexEndNameProgramm] =! ' ' && cmdline[indexEndNameProgram] != '\0')
-    {
-        indexEndNameProgramm++;
-    }
-    char* command = concatenationStr("mtrace ", cmdline, 8, indexEndNameProgramm);
-    command = concatenationStr(command, "mem.log", 8+indexEndNameProgramm, 8);
-    if(!system(command))
-    {
-        fprintf(stderr, "Невозможно создать mem.log\n");
-        exit()
-    }
-    free(command);*/
+    // int indexEndNameProgramm = 0;
+    // while(cmdline[indexEndNameProgramm] =! ' ' && cmdline[indexEndNameProgram] != '\0')
+    // {
+    //     indexEndNameProgramm++;
+    // }
+    // char* command = concatenationStr("mtrace ", cmdline, 8, indexEndNameProgramm);
+    // command = concatenationStr(command, "mem.log", 8+indexEndNameProgramm, 8);
+    // if(!system(command))
+    // {
+    //     fprintf(stderr, "Невозможно создать mem.log\n");
+    //     exit()
+    // }
+    // free(command);
     FILE* mem_log = fopen("./mem.log", "r");
     if(mem_log == NULL)
     {
