@@ -11,6 +11,5 @@ int main(int argc, char* argv[])
     ptr = new(1000);
     printf("%lld\n", ptr);
   }
-  //free(ptr);
-  getchar();
+  free(ptr);
 }

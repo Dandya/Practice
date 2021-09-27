@@ -6,29 +6,17 @@
 #ifndef MEM_H
 #define MEM_H
 
-static char* cmdline;
-
 void* new(size_t size)
 {
     return malloc(size);
 }
 
-/**
- * concatenatoinStr
- * * Function concatenations two strings
- */
-static char* concatenationStr(char* strFirst, char* strSecond, int length1, int length2)
+static int goToNewLine(FILE* stream)
 {
-    char *newStr = realloc(strFirst,length1 + length2);
-    if(strSecond == NULL)
+    while(fgetc(stream) != '\n')
     {
-        return newStr;
+        continue;
     }
-    for(int index = 0; index <= length2; index++)
-    {
-        newStr[index+length1] = strSecond[index];
-    }
-    return newStr;
 }
 
 static void __attribute__((constructor)) constructor(void)
@@ -42,36 +30,47 @@ static void __attribute__((constructor)) constructor(void)
         fprintf(stderr, "Невозможно создать переменную окружения MALLOC_TRACE!\n");
     }
     mtrace();
-    FILE* proc = fopen("/proc/self/cmdline", "r");        
-    if(proc == NULL)
-    {
-        printf("proc");
-    }
-    cmdline = (char*)malloc(257);
-    fgets(cmdline, 257, proc);
-    fclose(proc);
-    //printf("%s\n", cmdline);
 }
 
 static void __attribute__((destructor)) freeMem(void)
 {
-    // int indexEndNameProgramm = 0;
-    // while(cmdline[indexEndNameProgramm] =! ' ' && cmdline[indexEndNameProgram] != '\0')
-    // {
-    //     indexEndNameProgramm++;
-    // }
-    // char* command = concatenationStr("mtrace ", cmdline, 8, indexEndNameProgramm);
-    // command = concatenationStr(command, "mem.log", 8+indexEndNameProgramm, 8);
-    // if(!system(command))
-    // {
-    //     fprintf(stderr, "Невозможно создать mem.log\n");
-    //     exit()
-    // }
-    // free(command);
-    FILE* mem_log = fopen("./mem.log", "r");
-    if(mem_log == NULL)
+    if(!system("mtrace mem.log > mem.result.log"))
     {
-        fprintf(stderr, "Невозможно открыть mem_log\n");
+        fprintf(stderr, "Невозможно использовать программу mtrace или записать её вывод в mem.result.log\n");
+    }
+    FILE* mem_result_log = fopen("./mem.result.log", "r");
+    if(mem_result_log == NULL)
+    {
+        fprintf(stderr, "Невозможно открыть mem_result_log\n");
+    }
+    void* ptr; 
+    char* ptrHex = (char*)malloc(19);
+    int index = 0;
+    while(!feof(mem_result_log))
+    {
+        if(fgets(ptrHex, 19, mem_result_log) == NULL)
+        {
+            break;
+        }
+        printf("%s\n", ptrHex);
+        if(ptrHex[1] == 'x')
+        {
+            ptr = (void*)strtoll(ptrHex, NULL, 16);
+            free(ptr);
+            index++;
+            printf("%d - %lld\n", index, ptr);
+        }
+        goToNewLine(mem_result_log);
+    }
+    free(ptrHex);
+    fclose(mem_result_log);
+    if(system("rm mem.result.log"))
+    {
+        fprintf(stderr, "Невозможно удалить mem.result.log\n");
+    }
+    if(system("rm mem.log"))
+    {
+        fprintf(stderr, "Невозможно удалить mem.log\n");
     }
 }
 
