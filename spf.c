@@ -25,6 +25,9 @@ static int search_fast_process()
     int min_time = prev_proc->time_end;
     next_proc = first_proc;
     
+    if(first_proc == NULL)
+        return -1;
+    
     do
     {
         if (next_proc->time_end < min_time)
@@ -70,8 +73,8 @@ int sched(int time, int cont)
     delete_process(prev_id);
   }
   
-  int 
-
+  prev_proc->time = cont;
+  
   return process_count;
 }
 
