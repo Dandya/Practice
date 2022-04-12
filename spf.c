@@ -80,7 +80,7 @@ int sched(int time, int cont)
   prev_proc->time_end = cont;
   
   
-  return needed_search? search_fast_process;
+  return needed_search? search_fast_process(): prev_proc->id;
 }
 
 int sched_fin(void)
