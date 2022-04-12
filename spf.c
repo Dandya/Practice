@@ -49,8 +49,14 @@ static int search_fast_process()
     return fast_proc->id;
 }
 
-static int delete_process()
+static int delete_process(struct process_info *proc)
 {
+    struct process_info *tmp_proc = first_proc;
+    
+    while(tmp_proc->next != proc)
+        tmp_proc = tmp_proc->next;
+        
+    tmp_proc->next = proc
     return 0;
 }
 
