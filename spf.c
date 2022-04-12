@@ -35,7 +35,7 @@ static int search_fast_process()
         next_proc = next_proc->next;
     } while(next_proc != NULL);
     
-    if (id != prev_proc->id)
+    if (id != prev_proc->id || min_time == 0)
         needed_search = 1;
     else
         needed_search = 0;
