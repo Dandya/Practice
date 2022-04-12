@@ -56,7 +56,9 @@ static int delete_process(struct process_info *proc)
     while(tmp_proc->next != proc)
         tmp_proc = tmp_proc->next;
         
-    tmp_proc->next = proc
+    tmp_proc->next = proc->next;
+    
+    free(proc);
     return 0;
 }
 
