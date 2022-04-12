@@ -69,11 +69,12 @@ int add_proc(void)
 
 int sched(int time, int cont)
 {
-  if (cont == 0 && time != 0) {
-    delete_process(prev_id);
+  if (cont == 0 && time != 0) 
+  {
+    delete_process(prev_proc);
   }
   
-  prev_proc->time = cont;
+  prev_proc->time_end = cont;
   
   return process_count;
 }
