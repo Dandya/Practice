@@ -9,7 +9,7 @@ static struct process_info
     int id;
     int time_end;
     struct process_info *next;
-} *first_proc, *next_proc;
+} *first_proc, *next_proc, *prev_proc;
 
 
 // Сделать структуру с описанием процесса, и односвязным списком хранить инфу
@@ -17,13 +17,12 @@ static struct process_info
 
 
 static int process_count;
-static int prev_id = 0;
 
 
 static int search_fast_process()
 {
-    int id = 0;
-    int min_time = first_proc->time_end;
+    int id = prev_proc->id;
+    int min_time = prev_proc->time_end;
     next_proc = first_proc->next;
     
     if( next_proc == NULL )
@@ -33,7 +32,7 @@ static int search_fast_process()
     
     do
     {
-        if (next_proc->time_end < min_time)
+        if (next_proc->time_end <= min_time)
         {
             id = next_proc->id;
             min_time = next_proc->time_end;
