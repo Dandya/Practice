@@ -21,8 +21,9 @@ static int needed_search;
 
 static int search_fast_process()
 {
-    int id = prev_proc->id;
-    int min_time = prev_proc->time_end;
+    //int id = prev_proc->id;
+    //int min_time = prev_proc->time_end;
+    struct process_info *fast_proc = prev_proc;
     next_proc = first_proc;
     
     if(first_proc == NULL)
@@ -30,20 +31,22 @@ static int search_fast_process()
     
     do
     {
-        if (next_proc->time_end < min_time)
+        if (next_proc->time_end < fast_proc->time_end)
         {
-            id = next_proc->id;
-            min_time = next_proc->time_end;
+            fast_proc = next_proc;
+            //id = next_proc->id;
+            //min_time = next_proc->time_end;
         }
         next_proc = next_proc->next;
     } while(next_proc != NULL);
     
-    if (id != prev_proc->id || min_time == 0)
+    if (fast_proc->id != prev_proc->id || min_time == 0)
         needed_search = 1;
     else
         needed_search = 0;
         
-    return id;
+    prev_proc = fast_proc;
+    return fast_proc->id;
 }
 
 static int delete_process()
@@ -76,7 +79,8 @@ int sched(int time, int cont)
   
   prev_proc->time_end = cont;
   
-  return process_count;
+  
+  return needed_search? search_fast_process;
 }
 
 int sched_fin(void)
