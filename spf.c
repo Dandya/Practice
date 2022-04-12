@@ -44,6 +44,9 @@ static int search_fast_process()
 }
 
 static int delete_process()
+{
+    return 0;
+}
 
 int sched_init(void)
 {
