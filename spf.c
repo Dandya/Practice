@@ -38,7 +38,8 @@ static int search_fast_process()
     if (id != prev_proc->id)
         needed_search = 1;
     else
-    
+        needed_search = 0;
+        
     return id;
 }
 
