@@ -17,28 +17,27 @@ static struct process_info
 
 
 static int process_count;
-
+static int needed_search;
 
 static int search_fast_process()
 {
     int id = prev_proc->id;
     int min_time = prev_proc->time_end;
-    next_proc = first_proc->next;
-    
-    if( next_proc == NULL )
-    {
-        return 0;
-    }
+    next_proc = first_proc;
     
     do
     {
-        if (next_proc->time_end <= min_time)
+        if (next_proc->time_end < min_time)
         {
             id = next_proc->id;
             min_time = next_proc->time_end;
         }
         next_proc = next_proc->next;
     } while(next_proc != NULL);
+    
+    if (id != prev_proc->id)
+        needed_search = 1;
+    else
     
     return id;
 }
