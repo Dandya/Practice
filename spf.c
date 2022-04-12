@@ -19,7 +19,7 @@ static struct process_info
 static int process_count;
 
 
-int search_fast_process()
+static int search_fast_process()
 {
     int id = 0;
     int min_time = first_proc->time_end;
@@ -64,6 +64,8 @@ int sched(int time, int cont)
   if (cont == 0) {
     process_count--;
   }
+  
+  
 
   return process_count;
 }
