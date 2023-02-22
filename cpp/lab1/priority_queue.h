@@ -1,3 +1,5 @@
+#pragma one
+
 #include <iostream>
 #include <vector>
 

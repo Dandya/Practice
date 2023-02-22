@@ -15,6 +15,15 @@ TEST(PriorityQueue, TestNullSize)
   {
     EXPECT_TRUE(true);
   }
+  try
+  {
+    queue.top();
+    EXPECT_TRUE(false);
+  }
+  catch (std::runtime_error &e)
+  {
+    EXPECT_TRUE(true);
+  }
 }
 
 TEST(PriorityQueue, TestRandom)
