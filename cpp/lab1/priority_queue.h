@@ -40,7 +40,7 @@ public:
     int getSize() { return m_container.size(); }
 
     bool isEmpty() { return m_container.empty(); }
-    
+
     void push(Type value)
     {
         m_container.push_back(value);
