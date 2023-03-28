@@ -68,5 +68,6 @@
         "variant": "cpp"
     },
     "cmake.sourceDirectory": "${workspaceFolder}/lab1",
-    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.errorSquiggles": "disabled"
 }
