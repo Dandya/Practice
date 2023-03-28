@@ -93,6 +93,8 @@ class Graph {
     std::vector<std::vector<int>> AlgFleury();
 
     std::vector<int> findEulerCircle();
+
+    std::vector<std::vector<int>> AlgKosaraju();
 };
 
 #endif

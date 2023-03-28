@@ -25,6 +25,16 @@ std::vector<std::vector<bool>>
                  {true, false, false, true, false, false},
                  {true, true, false, false, false, false}});
 
+std::vector<std::vector<bool>>
+    adj_matrix4({{false, false, false, true, false, false, false, false},
+                 {true, false, false, false, false, false, false, false},
+                 {false, true, false, false, true, false, true, false},
+                 {true, false, false, false, true, false, false, false},
+                 {false, true, false, false, false, false, false, false},
+                 {false, false, true, false, true, false, false, false},
+                 {false, true, true, false, false, true, false, false},
+                 {false, false, false, false, true, false, true, false}});
+
 
 std::vector<std::vector<double>> edge_weights2({{0, 0, 3, 0, 2, 1},
                                                 {0, 0, 4, 2, 0, 7},
@@ -292,6 +302,18 @@ TEST(AlgorithmOnCircles, TestWork) {
     EXPECT_EQ(true_result, result);
     for (int i = 0; i < true_result.size(); i++) 
         EXPECT_EQ(true_result[i], result[i]);
+}
+
+TEST(AlgorithmKosaraju, emptyMatrix) {
+    Graph graph;
+    EXPECT_EQ(0, graph.AlgKosaraju().size());
+}
+
+TEST(AlgorithmKosaraju, TestWork) {
+    Graph graph(adj_matrix4);
+    std::vector<std::vector<int>> true_result({{1,4,3,0}, {5,6,2}, {7}});
+    std::vector<std::vector<int>> result = graph.AlgKosaraju();
+    EXPECT_EQ(true_result, result);
 }
 
 int main(int argc, char **argv) {

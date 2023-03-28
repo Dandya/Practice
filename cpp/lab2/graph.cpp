@@ -442,13 +442,12 @@ void Graph::removeEdge(int from, int to, bool is_undirected) {
 void Graph::dfs(int parent_node, std::vector<bool> &flags_visited_nodes,
                 std::stack<int> &visited_nodes) {
     flags_visited_nodes[parent_node] = true;
+    visited_nodes.push(parent_node);
     for (int children_node = 0; children_node < m_count_nodes; children_node++)
         if (m_adj_matrix[parent_node][children_node])
             if (!flags_visited_nodes[children_node]) {
                 dfs(children_node, flags_visited_nodes, visited_nodes);
             }
-
-    visited_nodes.push(parent_node);
 }
 
 int Graph::getCountConnectivityComponents() {
@@ -556,7 +555,7 @@ std::vector<int> Graph::findEulerCircle() {
     return result;
 }
 
-void Graph::dfs(int parent_node, std::vector<bool> &flags_visited_nodes,
+void Graph::dfs_inv(int parent_node, std::vector<bool> &flags_visited_nodes,
                 std::stack<int> &visited_nodes) {
     flags_visited_nodes[parent_node] = true;
     for (int children_node = 0; children_node < m_count_nodes; children_node++)
@@ -566,4 +565,47 @@ void Graph::dfs(int parent_node, std::vector<bool> &flags_visited_nodes,
             }
 
     visited_nodes.push(parent_node);
+}
+
+std::vector<std::vector<int>> Graph::AlgKosaraju() {
+    std::vector<std::vector<int>> result;
+    int count_connectivity_components = 0;
+    // create inverted graph
+    std::vector<std::vector<bool>> inv_adj_matrix(m_count_nodes);
+    for(int i = 0; i < m_count_nodes; i++) {
+        inv_adj_matrix[i].resize(m_count_nodes);
+        for(int j = 0; j < m_count_nodes; j++) {
+            inv_adj_matrix[i][j] = m_adj_matrix[j][i];
+        }
+    }
+
+    // use dfs_inv for inverted graph
+    m_adj_matrix.swap(inv_adj_matrix);
+    std::vector<bool> flags_visited_nodes(m_count_nodes);
+    std::stack<int> visited_nodes_inv;
+    for(int node = 0; node < m_count_nodes; node++) {
+        if(!flags_visited_nodes[node]) {
+            dfs_inv(node, flags_visited_nodes, visited_nodes_inv);
+        }
+    }
+
+    for(int i = 0; i < m_count_nodes; i++)
+        flags_visited_nodes[i] = false;
+    // use dfs for create connectivity components
+    m_adj_matrix.swap(inv_adj_matrix);
+    std::stack<int> visited_nodes;
+    while(!visited_nodes_inv.empty()) {
+        int node = visited_nodes_inv.top();
+        visited_nodes_inv.pop();
+        if(!flags_visited_nodes[node]) {
+            dfs(node, flags_visited_nodes, visited_nodes);
+            result.resize(result.size()+1);
+            while(!visited_nodes.empty()) {
+                result[count_connectivity_components].push_back(visited_nodes.top());
+                visited_nodes.pop();
+            }
+            count_connectivity_components++;
+        }
+    }
+    return result;
 }
