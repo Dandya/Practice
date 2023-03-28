@@ -441,7 +441,6 @@ void Graph::removeEdge(int from, int to, bool is_undirected) {
 
 void Graph::dfs(int parent_node, std::vector<bool> &flags_visited_nodes,
                 std::stack<int> &visited_nodes) {
-
     flags_visited_nodes[parent_node] = true;
     for (int children_node = 0; children_node < m_count_nodes; children_node++)
         if (m_adj_matrix[parent_node][children_node])
@@ -555,4 +554,16 @@ std::vector<int> Graph::findEulerCircle() {
     findEulerCircle_recursive(graph_copy, 0, result);
 
     return result;
+}
+
+void Graph::dfs(int parent_node, std::vector<bool> &flags_visited_nodes,
+                std::stack<int> &visited_nodes) {
+    flags_visited_nodes[parent_node] = true;
+    for (int children_node = 0; children_node < m_count_nodes; children_node++)
+        if (m_adj_matrix[parent_node][children_node])
+            if (!flags_visited_nodes[children_node]) {
+                dfs_inv(children_node, flags_visited_nodes, visited_nodes);
+            }
+
+    visited_nodes.push(parent_node);
 }

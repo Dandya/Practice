@@ -29,6 +29,8 @@ class Graph {
                            std::stack<int> &visited_nodes, std::vector<int> parents_nodes);
     void dfs(int parent_node, std::vector<bool> &flags_visited_nodes,
                 std::stack<int> &visited_nodes);
+    void dfs_inv(int parent_node, std::vector<bool> &flags_visited_nodes,
+                std::stack<int> &visited_nodes);
     bool isEvenGraph();
     void findEulerCircle_recursive(Graph& graph, int node, std::vector<int> &result);
 
