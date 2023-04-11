@@ -8,8 +8,9 @@
 #include <stack>
 #include <vector>
 
-class Graph {
-  private:
+class Graph
+{
+private:
     std::vector<std::vector<bool>> m_adj_matrix;
     std::vector<std::vector<double>> m_edge_weights;
     int m_count_nodes = 0;
@@ -27,14 +28,12 @@ class Graph {
     void AlgTarjan_dfs_inv(int start_node,
                            std::vector<bool> &flags_visited_nodes,
                            std::stack<int> &visited_nodes, std::vector<int> parents_nodes);
-    void dfs(int parent_node, std::vector<bool> &flags_visited_nodes,
-                std::stack<int> &visited_nodes);
-    void dfs_inv(int parent_node, std::vector<bool> &flags_visited_nodes,
-                std::stack<int> &visited_nodes);
+    void dfs(int parent_node, std::vector<bool> &flags_visited_nodes, std::stack<int> &visited_nodes);
+    //void dfs_inv(int parent_node, std::vector<bool> &flags_visited_nodes, std::stack<int> &visited_nodes);
     bool isEvenGraph();
-    void findEulerCircle_recursive(Graph& graph, int node, std::vector<int> &result);
+    void findEulerCircle_recursive(Graph &graph, int node, std::vector<int> &result);
 
-  public:
+public:
     Graph();
 
     Graph(std::vector<std::vector<bool>> adj_matrix);
@@ -57,7 +56,7 @@ class Graph {
     int getCountEdgesFromNode(int from);
 
     int getCountConnectivityComponents();
-    
+
     void createNodes(int count);
 
     void addEdge(int from, int to, int weight);
@@ -88,6 +87,7 @@ class Graph {
     // difficulty: O(|E|^2)
     std::vector<std::vector<int>> AlgKruskal();
 
+    // difficulty: O(|E| + |V|)
     std::vector<int> AlgTarjan();
 
     std::vector<std::vector<int>> AlgFleury();

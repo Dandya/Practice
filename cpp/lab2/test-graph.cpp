@@ -311,7 +311,7 @@ TEST(AlgorithmKosaraju, emptyMatrix) {
 
 TEST(AlgorithmKosaraju, TestWork) {
     Graph graph(adj_matrix4);
-    std::vector<std::vector<int>> true_result({{1,4,3,0}, {5,6,2}, {7}});
+    std::vector<std::vector<int>> true_result({{0,3,4,1}, {2,6,5}, {7}});
     std::vector<std::vector<int>> result = graph.AlgKosaraju();
     EXPECT_EQ(true_result, result);
 }
