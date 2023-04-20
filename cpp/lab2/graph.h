@@ -90,10 +90,13 @@ public:
     // difficulty: O(|E| + |V|)
     std::vector<int> AlgTarjan();
 
+    // difficulty: O(|E|^3)
     std::vector<std::vector<int>> AlgFleury();
 
+    // difficulty: O(|E|)
     std::vector<int> findEulerCircle();
 
+    // difficulty: O(|E|^2)
     std::vector<std::vector<int>> AlgKosaraju();
 };
 

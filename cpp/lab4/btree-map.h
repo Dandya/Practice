@@ -30,8 +30,18 @@ private:
 
         node_btree() {}
         node_btree(node_btree *parent) : parent{parent} {}
-        node_btree(node_btree *parent, std::vector<entry> data) : parent{parent}, data{data} {}
-        node_btree(node_btree *parent, std::vector<entry> data, std::vector<node_btree *> childs) : parent{parent}, data{data}, childs{childs} {}
+        node_btree(node_btree *parent, std::vector<entry>::interator data_it_begin, std::vector<entry>::interator data_it_end) : parent{parent} {
+            for(; data_it_begin != data_it_end; data_it_begin++) {
+                data.push_back(*data_it_begin);
+            }
+        }
+        node_btree(node_btree *parent, std::vector<entry>::interator data_it_begin, std::vector<entry>::interator data_it_end,
+                std::vector<node_btree *>::interator childs_it_begin, std::vector<node_btree *>::interator childs_it_end) : 
+                node_btree(parent, data_it_begin, data_it_end) {
+            for(; childs_it_begin != childs_it_end; childs_it_begin++) {
+                childs.push_back(*childs_it_begin);
+            }
+        }
     };
 
     int min_degree; // min degree of b-tree
@@ -59,8 +69,21 @@ private:
         return -1;
     }
 
-    node_btree *separationNode(node_btree *node) {
+    void separationNode(node_btree *&node) {
+        node_btree *parent = node->parent;
         
+        int index_child;
+        for(int i = 0; i < parent->childs.size(); i++) {
+            if(parent->childs[i] == node) {
+                index_child = i;
+                break;
+            }
+        }
+
+        parent->data.insert(parent->data.begin() + index_child, node->data[min_degree-1]);
+        parent->childs[index_child] = new btree_map(parent, node->data.begin(), node->data.begin()+(min_degree-1),
+                                                    node->childs.begin(), node->childs.begin()+);
+        parent->childs.insert(parent->childs.begin()+index_child+1, new  btree_map(parent, node->data.begin()+(min_degree), node->data.end()));
     }
 
 public:

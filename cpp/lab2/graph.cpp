@@ -234,7 +234,7 @@ std::vector<double> Graph::AlgDijkstra(int start_node)
          count_not_visited_nodes > 0; --count_not_visited_nodes)
     {
         for (int i = 0; i < m_count_nodes; i++)
-            if (m_adj_matrix[index_min_path][i])
+            if (m_adj_matrix[index_min_path][i] && visited_nodes[i] == false)
                 if (shorted_paths[index_min_path] +
                         m_edge_weights[index_min_path][i] <
                     shorted_paths[i])
